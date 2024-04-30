@@ -244,13 +244,19 @@ puas <- lsoa_parks_play %>%
 
 ```{r}
 #| echo: false
-pua_imd <- puas %>% 
+pua_imd <- puas %>%
   count(country_name, PUA, index_of_multiple_deprivation_decile_country_specific) %>% 
-  group_by(PUA) %>% 
+  group_by(country_name, PUA) %>% 
   mutate(percentage = (n/sum(n)) * 100) %>% 
   ungroup() %>%
   filter(index_of_multiple_deprivation_decile_country_specific %in% 1:3) %>% 
   drop_na(PUA)
+```
+
+```{r}
+pua_imd %>% 
+  filter(country_name == "England") %>% 
+  arrange(index_of_multiple_deprivation_decile_country_specific, desc(percentage))
 ```
 
 ```{r}
