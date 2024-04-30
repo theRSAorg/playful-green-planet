@@ -1,0 +1,38 @@
+---
+title: "PGP - Candidate locations selection"
+author: "Eirini Zormpa"
+date: "2 May 2024"
+format: html
+---
+
+## The brief
+Identification of **5-10 cities** of interest across at least 2 countries in the UK.
+We suggest using the **Indices of Multiple Deprivation** (specific for children if possible) and utilising any other data we already have to inform this (perhaps data from urban futures?).
+A PGP partner mentioned **‘Access to nature’** data which may be useful if it’s already in an easily usable format – I’ve asked Eirini to look at it as a secondary focus and any other nature connection indices
+
+### What is a city?
+
+### Index of Multiple Deprivation & Access to Nature
+The data presented below comes from the ONS and relates to [Access to gardens and public green space in Great Britain](https://www.ons.gov.uk/economy/environmentalaccounts/datasets/accesstogardensandpublicgreenspaceingreatbritain)
+
+
+```{r}
+#| echo: false
+
+library(here)
+library(readxl)
+```
+This file contains the following sheets
+
+
+```{r}
+#| echo: false
+excel_sheets(here("data_raw", "ospublicgreenspacereferencetables.xlsx"))
+```
+
+
+
+
+
+
+
