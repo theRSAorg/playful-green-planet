@@ -61,14 +61,12 @@ excel_sheets(here("data-raw", "ospublicgreenspacereferencetables.xlsx"))
 ```
 To answer the question we're interested in ("Which are the most deprived cities in the UK?") we need to:
 
-1. combine LSOAs into Local Authority Districts (LADs)
-  - NB IMD is calculated on the level of LSOA
-2. calculate how deprived each LAD is
-3. combine LADs into cities/PUAs, as defined by the Centre for Cities
-4. calculate how deprived each city/PUA is
-5. order cities/PUAs in order of deprivation
+1. combine Local Authority Districts (LADs) into Primary Urban Areas (PUAs)
+2. calculate the level of deprivation in each PUA, taking into account that deprivation is measured on the level of LSOA
+3. order PUAs in order of deprivation
 
 Let's start by looking at the data in sheet number nine, *LSOA Parks and Playing Fields*.
+This is a sensible starting point because it is where the data that contains information on how deprived each LSOA is.
 
 ```{r}
 #| echo: true
@@ -80,10 +78,14 @@ lsoa_parks_play <- read_excel(here("data-raw", "ospublicgreenspacereferencetable
 dim(lsoa_parks_play)
 names(lsoa_parks_play)
 ```
-
+The next step is to combine LADs (and their component LSOAs) into PUAs.
+This is done using the [Centre for Cities 2022 Table](https://www.centreforcities.org/wp-content/uploads/2022/08/2022-PUA-Table.pdf).
+The code doing this is very long, but essentially what it does is create a new variable called  `PUA` and assigns a value to it depending on the LAD name associated with each obswervation.
 
 ```{r}
-#| echo: false
+#| echo: true
+#| code-fold: true
+
 puas <- lsoa_parks_play %>% 
   mutate(PUA = case_when(
            lad_name == "Aberdeen" ~ "Aberdeen",
@@ -242,8 +244,12 @@ puas <- lsoa_parks_play %>%
           ))
 ```
 
+Following procedure used in the RSA's [UK Urban Futures Commission report](https://www.thersa.org/design-for-life-our-mission/hubs/uk-urban-futures-commission), relative deprivation for each PUA is determined by the percentage of LSOAs that are in the most deprived deciles.
+
 ```{r}
-#| echo: false
+#| echo: true
+#| code-fold: true
+
 pua_imd <- puas %>%
   count(country_name, PUA, index_of_multiple_deprivation_decile_country_specific) %>% 
   group_by(country_name, PUA) %>% 
@@ -253,18 +259,32 @@ pua_imd <- puas %>%
   drop_na(PUA)
 ```
 
+These PUAs are then displayed for each country in Great Britain.
+
+England:
+
 ```{r}
+#| echo: true
+
 pua_imd %>% 
   filter(country_name == "England") %>% 
   arrange(index_of_multiple_deprivation_decile_country_specific, desc(percentage))
 ```
 
+Scotland: 
+
 ```{r}
+#| echo: true
+
 pua_imd %>% 
   filter(country_name == "Scotland")
 ```
 
+Wales:
+
 ```{r}
+#| echo: true
+
 pua_imd %>% 
   filter(country_name == "Wales")
 ```
