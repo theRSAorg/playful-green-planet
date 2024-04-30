@@ -2,36 +2,263 @@
 title: "PGP - Candidate locations selection"
 author: "Eirini Zormpa"
 date: "2 May 2024"
-format: html
+format:
+  html:
+    theme: flatly
+    toc: true
 ---
+
+<!--
+To-do:
+- make structure
+- do the things needed in each section :D
+- make custom RSA theme
+-->
 
 ## The brief
 Identification of **5-10 cities** of interest across at least 2 countries in the UK.
 We suggest using the **Indices of Multiple Deprivation** (specific for children if possible) and utilising any other data we already have to inform this (perhaps data from urban futures?).
 A PGP partner mentioned **‘Access to nature’** data which may be useful if it’s already in an easily usable format – I’ve asked Eirini to look at it as a secondary focus and any other nature connection indices
 
-### What is a city?
+## What is a city?
+A practical answer to this complicated question comes from the [Centre for Cities](https://www.centreforcities.org): they have selected the UK's 63 largest cities and towns, which they have defined as Primary Output Areas (PUAs).
+As explained on their website:
+
+> This is a measure of the “built-up” area of a large city or town, rather than individual local authority districts.
+> We use PUAs in our analysis because they provide a consistent measure to compare concentrations of economic activity across the UK.
+> This makes them distinct from city region or combined authority geographies.
+
+Following this methodology, the process presented here limits itself to these 63 PUAs.
+This excludes more rural areas, which could be problematic.
+On the one hand, these places are likely to have better access to green spaces.
+On the other hand, these green spaces may not be suitable for children to play in.
+Additionally, rural places can suffer from high levels of deprivation.
+
+## Place selection
 
 ### Index of Multiple Deprivation & Access to Nature
-The data presented below comes from the ONS and relates to [Access to gardens and public green space in Great Britain](https://www.ons.gov.uk/economy/environmentalaccounts/datasets/accesstogardensandpublicgreenspaceingreatbritain)
+The data presented below comes from the ONS and relates to [Access to gardens and public green space in Great Britain](https://www.ons.gov.uk/economy/environmentalaccounts/datasets/accesstogardensandpublicgreenspaceingreatbritain).
 
 
 ```{r}
-#| echo: false
+#| echo: true
+#| message: false
+#| warning: false
 
 library(here)
 library(readxl)
+library(dplyr)
+library(janitor)
+library(tidyr)
 ```
-This file contains the following sheets
+
+This file contains the following sheets:
+
+```{r}
+#| echo: true
+
+excel_sheets(here("data-raw", "ospublicgreenspacereferencetables.xlsx"))
+```
+To answer the question we're interested in ("Which are the most deprived cities in the UK?") we need to:
+
+1. combine LSOAs into Local Authority Districts (LADs)
+  - NB IMD is calculated on the level of LSOA
+2. calculate how deprived each LAD is
+3. combine LADs into cities/PUAs, as defined by the Centre for Cities
+4. calculate how deprived each city/PUA is
+5. order cities/PUAs in order of deprivation
+
+Let's start by looking at the data in sheet number nine, *LSOA Parks and Playing Fields*.
+
+```{r}
+#| echo: true
+
+lsoa_parks_play <- read_excel(here("data-raw", "ospublicgreenspacereferencetables.xlsx"),
+                              sheet = 9) %>% 
+  clean_names()
+
+dim(lsoa_parks_play)
+names(lsoa_parks_play)
+```
 
 
 ```{r}
 #| echo: false
-excel_sheets(here("data_raw", "ospublicgreenspacereferencetables.xlsx"))
+puas <- lsoa_parks_play %>% 
+  mutate(PUA = case_when(
+           lad_name == "Aberdeen" ~ "Aberdeen",
+           lad_name == "Rusmoor" ~ "Aldershot",
+           lad_name == "Surrey Heath" ~ "Aldershot",
+           lad_name == "Barnsley" ~ "Barnsley",
+           lad_name == "Basildon" ~ "Basildon",
+           lad_name == "Wirral" ~ "Birkenhead",
+           lad_name == "Birmingham" ~ "Birmingham",
+           lad_name == "Dudley" ~ "Birmingham",
+           lad_name == "Sandwell" ~ "Birmingham",
+           lad_name == "Solihull" ~ "Birmingham",
+           lad_name == "Walsall" ~ "Birmingham",
+           lad_name == "Wolverhampton" ~ "Birmingham",
+           lad_name == "Blackburn with Darwen" ~ "Blackburn",
+           lad_name == "Blackpool" ~ "Blackpool",
+           lad_name == "Fylde" ~ "Blackpool",
+           lad_name == "Dorset" ~ "Bournemouth",
+           lad_name == "Bournemouth, Christchurch and Poole" ~ "Bournemouth",
+           lad_name == "Bradford" ~ "Bradford",
+           lad_name == "Adur" ~ "Brighton",
+           lad_name == "Brighton and Hove" ~ "Brighton",
+           lad_name == "City of Bristol" ~ "Bristol",
+           lad_name == "South Gloucestershire" ~ "Bristol",
+           lad_name == "Burnley" ~ "Burnley",
+           lad_name == "Pendle" ~ "Burnley",
+           lad_name == "Cambridge" ~ "Cambridge",
+           lad_name == "Cardiff" ~ "Cardiff",
+           lad_name == "Medway" ~ "Chatham",
+           lad_name == "Coventry" ~ "Coventry",
+           lad_name == "Crawley" ~ "Crawley",
+           lad_name == "Derby" ~ "Derby",
+           lad_name == "Doncaster" ~ "Doncaster",
+           lad_name == "Dundee" ~ "Dundee",
+           lad_name == "Edinburgh" ~ "Edinburgh",
+           lad_name == "Exeter" ~ "Exeter",
+           lad_name == "East Dunbartonshire" ~ "Glasgow",
+           lad_name == "East Renfrewshire" ~ "Glasgow",
+           lad_name == "Glasgow" ~ "Glasgow",
+           lad_name == "Renfrewshire" ~ "Glasgow",
+           lad_name == "Gloucester" ~ "Gloucester",
+           lad_name == "Kirklees" ~ "Huddersfield",
+           lad_name == "Kingston upon Hull" ~ "Hull",
+           lad_name == "Ipswich" ~ "Ipswich",
+           lad_name == "Leeds" ~ "Leeds",
+           lad_name == "Blaby" ~ "Leicester",
+           lad_name == "Leicester" ~ "Leicester",
+           lad_name == "Oadby and Wigston" ~ "Leicester",
+           lad_name == "Knowsley" ~ "Liverpool",
+           lad_name == "Barking and Dagenham" ~ "London",
+           lad_name == "Barnet" ~ "London",
+           lad_name == "Bexley" ~ "London",
+           lad_name == "Brent" ~ "London",
+           lad_name == "Bromley" ~ "London",
+           lad_name == "Broxbourne" ~ "London",
+           lad_name == "Camden" ~ "London",
+           lad_name == "City of London" ~ "London",
+           lad_name == "Croydon" ~ "London",
+           lad_name == "Dartford" ~ "London",
+           lad_name == "Ealing" ~ "London",
+           lad_name == "Elmbridge" ~ "London",
+           lad_name == "Enfield" ~ "London",
+           lad_name == "Epping Forest" ~ "London",
+           lad_name == "Epsom and Ewell" ~ "London",
+           lad_name == "Gravesham" ~ "London",
+           lad_name == "Greenwich" ~ "London",
+           lad_name == "Hackney" ~ "London",
+           lad_name == "Hammersmith and Fulham" ~ "London",
+           lad_name == "Haringey" ~ "London",
+           lad_name == "Harrow" ~ "London",
+           lad_name == "Havering" ~ "London",
+           lad_name == "Hertsmere" ~ "London",
+           lad_name == "Hillingdon" ~ "London",
+           lad_name == "Hounslow" ~ "London",
+           lad_name == "Islington" ~ "London",
+           lad_name == "Kensington and Chelsea" ~ "London",
+           lad_name == "Kingston upon Thames" ~ "London",
+           lad_name == "Lambeth" ~ "London",
+           lad_name == "Lewisham" ~ "London",
+           lad_name == "Merton" ~ "London",
+           lad_name == "Newham" ~ "London",
+           lad_name == "Redbridge" ~ "London",
+           lad_name == "Richard upon Thames" ~ "London",
+           lad_name == "Runnymede" ~ "London",
+           lad_name == "Southwark" ~ "London",
+           lad_name == "Spelthorne" ~ "London",
+           lad_name == "Sutton" ~ "London",
+           lad_name == "Three Rivers" ~ "London",
+           lad_name == "Tower Hamlets" ~ "London",
+           lad_name == "Waltham Forest" ~ "London",
+           lad_name == "Wandsworth" ~ "London",
+           lad_name == "Watford" ~ "London",
+           lad_name == "Westminster" ~ "London",
+           lad_name == "Woking" ~ "London",
+           lad_name == "Luton" ~ "Luton",
+           lad_name == "Bolton" ~ "Manchester",
+           lad_name == "Bury" ~ "Manchester",
+           lad_name == "Manchester" ~ "Manchester",
+           lad_name == "Oldham" ~ "Manchester",
+           lad_name == "Rochdale" ~ "Manchester",
+           lad_name == "Salford" ~ "Manchester",
+           lad_name == "Stockport" ~ "Manchester",
+           lad_name == "Tameside" ~ "Manchester",
+           lad_name == "Trafford" ~ "Manchester",
+           lad_name == "Ashfield" ~ "Mansfield",
+           lad_name == "Mansfield" ~ "Mansfield",
+           lad_name == "Middlesbrough" ~ "Middlesbrough",
+           lad_name == "Redcar and Cleveland" ~ "Middlesbrough",
+           lad_name == "Stockton-on-Tees" ~ "Middlesbrough",
+           lad_name == "Milton Keynes" ~ "Milton Keynes",
+           lad_name == "Gateshead" ~ "Newcastle",
+           lad_name == "Newcastle upon Tyne" ~ "Newcastle",
+           lad_name == "North Tyneside" ~ "Newcastle",
+           lad_name == "South Tyneside" ~ "Newcastle",
+           lad_name == "Newport" ~ "Newport",
+           lad_name == "Torfaen" ~ "Newport",
+           lad_name == "West Northamptonshire" ~ "Northampton",
+           lad_name == "Broadland" ~ "Norwich",
+           lad_name == "Norwich" ~ "Norwich",
+           lad_name == "Broxtowe" ~ "Nottingham",
+           lad_name == "Erewash" ~ "Nottingham",
+           lad_name == "Gedling" ~ "Nottingham",
+           lad_name == "Nottingham" ~ "Nottingham",
+           lad_name == "Oxford" ~ "Oxford",
+           lad_name == "Peterborough" ~ "Peterborough",
+           lad_name == "Plymouth" ~ "Plymouth",
+           lad_name == "Portsmouth" ~ "Portsmouth",
+           lad_name == "Fareham" ~ "Portsmouth",
+           lad_name == "Gosport" ~ "Portsmouth",
+           lad_name == "Havant" ~ "Portsmouth",
+           lad_name == "Chorley" ~ "Preston",
+           lad_name == "Preston" ~ "Preston",
+           lad_name == "South Ribble" ~ "Preston",
+           lad_name == "Reading" ~ "Reading",
+           lad_name == "Wokingham" ~ "Reading",
+           lad_name == "Rotherham" ~ "Sheffield",
+           lad_name == "Sheffield" ~ "Sheffield",
+           lad_name == "Slough" ~ "Slough",
+           lad_name == "Eastleigh" ~ "Southampton",
+           lad_name == "Southampton" ~ "Southampton",
+           lad_name == "Castlepoint" ~ "Southend",
+           lad_name == "Southend-on-Sea" ~ "Southend",
+           lad_name == "Rochford" ~ "Southend",
+           lad_name == "Newcastle-under-Lyme" ~ "Stoke",
+           lad_name == "Stoke-on-Trent" ~ "Stoke",
+           lad_name == "Sunderland" ~ "Sunderland",
+           lad_name == "Neath Port Talbot" ~ "Swansea",
+           lad_name == "Swansea" ~ "Swansea",
+           lad_name == "Swindon" ~ "Swindon",
+           lad_name == "Telford and Wrekin" ~ "Telford",
+           lad_name == "Wakefield" ~ "Wakefield",
+           lad_name == "Warrington" ~ "Warrington",
+           lad_name == "Wigan" ~ "Wigan",
+           lad_name == "Worthing" ~ "Worthing",
+           lad_name == "York" ~ "York"
+          ))
+```
+
+```{r}
+#| echo: false
+pua_imd <- puas %>% 
+  count(country_name, PUA, index_of_multiple_deprivation_decile_country_specific) %>% 
+  group_by(PUA) %>% 
+  mutate(percentage = (n/sum(n)) * 100) %>% 
+  ungroup() %>%
+  filter(index_of_multiple_deprivation_decile_country_specific %in% 1:3) %>% 
+  drop_na(PUA)
 ```
 
 
 
+### Cross-checking with harmonised IMD data
+
+
+### Cross-checking with Childern's IMD (England)
 
 
 
