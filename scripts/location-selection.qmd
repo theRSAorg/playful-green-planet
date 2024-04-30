@@ -253,7 +253,15 @@ pua_imd <- puas %>%
   drop_na(PUA)
 ```
 
+```{r}
+pua_imd %>% 
+  filter(country_name == "Scotland")
+```
 
+```{r}
+pua_imd %>% 
+  filter(country_name == "Wales")
+```
 
 ### Cross-checking with harmonised IMD data
 
