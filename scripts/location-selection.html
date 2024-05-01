@@ -86,7 +86,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#place-selection" id="toc-place-selection" class="nav-link" data-scroll-target="#place-selection">Place selection</a>
   <ul class="collapse">
   <li><a href="#index-of-multiple-deprivation-access-to-nature" id="toc-index-of-multiple-deprivation-access-to-nature" class="nav-link" data-scroll-target="#index-of-multiple-deprivation-access-to-nature">Index of Multiple Deprivation &amp; Access to Nature</a></li>
-  <li><a href="#cross-checking-with-childrens-imd-england" id="toc-cross-checking-with-childrens-imd-england" class="nav-link" data-scroll-target="#cross-checking-with-childrens-imd-england">Cross-checking with Children’s IMD (England)</a></li>
+  <li><a href="#cross-checking-with-income-deprivation-affecting-children-index-idaci-england" id="toc-cross-checking-with-income-deprivation-affecting-children-index-idaci-england" class="nav-link" data-scroll-target="#cross-checking-with-income-deprivation-affecting-children-index-idaci-england">Cross-checking with Income Deprivation Affecting Children Index (IDACI; England)</a></li>
   <li><a href="#cross-checking-with-harmonised-imd-data" id="toc-cross-checking-with-harmonised-imd-data" class="nav-link" data-scroll-target="#cross-checking-with-harmonised-imd-data">Cross-checking with harmonised IMD data</a></li>
   </ul></li>
   </ul>
@@ -137,7 +137,7 @@ To-do:
 </section>
 <section id="what-is-a-city" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-a-city">What is a city?</h2>
-<p>A practical answer to this complicated question comes from the <a href="https://www.centreforcities.org">Centre for Cities</a>: they have selected the UK’s 63 largest cities and towns, which they have defined as Primary Output Areas (PUAs). As explained on their website:</p>
+<p>A practical answer to this complicated question comes from the <a href="https://www.centreforcities.org">Centre for Cities</a>: they have selected the UK’s 63 largest cities and towns, which they have defined as Primary Urban Areas (PUAs). As explained on their website:</p>
 <blockquote class="blockquote">
 <p>This is a measure of the “built-up” area of a large city or town, rather than individual local authority districts. We use PUAs in our analysis because they provide a consistent measure to compare concentrations of economic activity across the UK. This makes them distinct from city region or combined authority geographies.</p>
 </blockquote>
@@ -581,8 +581,239 @@ To-do:
 </section>
 </section>
 </section>
-<section id="cross-checking-with-childrens-imd-england" class="level3">
-<h3 class="anchored" data-anchor-id="cross-checking-with-childrens-imd-england">Cross-checking with Children’s IMD (England)</h3>
+<section id="cross-checking-with-income-deprivation-affecting-children-index-idaci-england" class="level3">
+<h3 class="anchored" data-anchor-id="cross-checking-with-income-deprivation-affecting-children-index-idaci-england">Cross-checking with Income Deprivation Affecting Children Index (IDACI; England)</h3>
+<p>This data relates to the <a href="https://www.gov.uk/government/statistics/english-indices-of-deprivation-2019">English indices of deprivation 2019</a>.</p>
+<p>The data was downloaded from the GOV.UK website and was made available by the Ministry of Housing, Communities &amp; Local Government.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">excel_sheets</span>(<span class="fu">here</span>(<span class="st">"data-raw"</span>, <span class="st">"File_3_-_IoD2019_Supplementary_Indices_-_IDACI_and_IDAOPI.xlsx"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Notes"                  "IoD2019 IDACI &amp; IDAOPI"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>idaci_idaopi <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="fu">here</span>(<span class="st">"data-raw"</span>, <span class="st">"File_3_-_IoD2019_Supplementary_Indices_-_IDACI_and_IDAOPI.xlsx"</span>),</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">sheet =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>()</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(idaci_idaopi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "lsoa_code_2011"                                                                                        
+ [2] "lsoa_name_2011"                                                                                        
+ [3] "local_authority_district_code_2019"                                                                    
+ [4] "local_authority_district_name_2019"                                                                    
+ [5] "index_of_multiple_deprivation_imd_rank_where_1_is_most_deprived"                                       
+ [6] "index_of_multiple_deprivation_imd_decile_where_1_is_most_deprived_10_percent_of_lso_as"                
+ [7] "income_deprivation_affecting_children_index_idaci_rank_where_1_is_most_deprived"                       
+ [8] "income_deprivation_affecting_children_index_idaci_decile_where_1_is_most_deprived_10_percent_of_lso_as"
+ [9] "income_deprivation_affecting_older_people_idaopi_rank_where_1_is_most_deprived"                        
+[10] "income_deprivation_affecting_older_people_idaopi_decile_where_1_is_most_deprived_10_percent_of_lso_as" </code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>idaci <span class="ot">&lt;-</span> idaci_idaopi <span class="sc">%&gt;%</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">lsoa_code =</span> lsoa_code_2011,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">lsoa_name =</span> lsoa_name_2011,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">lad_name =</span> local_authority_district_name_2019,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">lad_code =</span> local_authority_district_code_2019,</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">imd_rank =</span> index_of_multiple_deprivation_imd_rank_where_1_is_most_deprived,</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">imd_decile =</span> index_of_multiple_deprivation_imd_decile_where_1_is_most_deprived_10_percent_of_lso_as,</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">idaci_rank =</span> income_deprivation_affecting_children_index_idaci_rank_where_1_is_most_deprived,</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">idaci_decile =</span> income_deprivation_affecting_children_index_idaci_decile_where_1_is_most_deprived_10_percent_of_lso_as) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pua =</span> <span class="fu">case_when</span>(</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># the CfC table had this LAD down as Aberdeen. ideally check if Aberdeen City is what is meant, as there is also Aberdeenshire</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Aberdeen City"</span> <span class="sc">~</span> <span class="st">"Aberdeen"</span>,</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Rusmoor"</span> <span class="sc">~</span> <span class="st">"Aldershot"</span>,</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Surrey Heath"</span> <span class="sc">~</span> <span class="st">"Aldershot"</span>,</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Barnsley"</span> <span class="sc">~</span> <span class="st">"Barnsley"</span>,</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Basildon"</span> <span class="sc">~</span> <span class="st">"Basildon"</span>,</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Wirral"</span> <span class="sc">~</span> <span class="st">"Birkenhead"</span>,</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Birmingham"</span> <span class="sc">~</span> <span class="st">"Birmingham"</span>,</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Dudley"</span> <span class="sc">~</span> <span class="st">"Birmingham"</span>,</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Sandwell"</span> <span class="sc">~</span> <span class="st">"Birmingham"</span>,</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Solihull"</span> <span class="sc">~</span> <span class="st">"Birmingham"</span>,</span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Walsall"</span> <span class="sc">~</span> <span class="st">"Birmingham"</span>,</span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Wolverhampton"</span> <span class="sc">~</span> <span class="st">"Birmingham"</span>,</span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Blackburn with Darwen"</span> <span class="sc">~</span> <span class="st">"Blackburn"</span>,</span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Blackpool"</span> <span class="sc">~</span> <span class="st">"Blackpool"</span>,</span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Fylde"</span> <span class="sc">~</span> <span class="st">"Blackpool"</span>,</span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Dorset"</span> <span class="sc">~</span> <span class="st">"Bournemouth"</span>,</span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Bournemouth, Christchurch and Poole"</span> <span class="sc">~</span> <span class="st">"Bournemouth"</span>,</span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Bradford"</span> <span class="sc">~</span> <span class="st">"Bradford"</span>,</span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Adur"</span> <span class="sc">~</span> <span class="st">"Brighton"</span>,</span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Brighton and Hove"</span> <span class="sc">~</span> <span class="st">"Brighton"</span>,</span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"City of Bristol"</span> <span class="sc">~</span> <span class="st">"Bristol"</span>,</span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"South Gloucestershire"</span> <span class="sc">~</span> <span class="st">"Bristol"</span>,</span>
+<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Burnley"</span> <span class="sc">~</span> <span class="st">"Burnley"</span>,</span>
+<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Pendle"</span> <span class="sc">~</span> <span class="st">"Burnley"</span>,</span>
+<span id="cb28-36"><a href="#cb28-36" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Cambridge"</span> <span class="sc">~</span> <span class="st">"Cambridge"</span>,</span>
+<span id="cb28-37"><a href="#cb28-37" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Cardiff"</span> <span class="sc">~</span> <span class="st">"Cardiff"</span>,</span>
+<span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Medway"</span> <span class="sc">~</span> <span class="st">"Chatham"</span>,</span>
+<span id="cb28-39"><a href="#cb28-39" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Coventry"</span> <span class="sc">~</span> <span class="st">"Coventry"</span>,</span>
+<span id="cb28-40"><a href="#cb28-40" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Crawley"</span> <span class="sc">~</span> <span class="st">"Crawley"</span>,</span>
+<span id="cb28-41"><a href="#cb28-41" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Derby"</span> <span class="sc">~</span> <span class="st">"Derby"</span>,</span>
+<span id="cb28-42"><a href="#cb28-42" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Doncaster"</span> <span class="sc">~</span> <span class="st">"Doncaster"</span>,</span>
+<span id="cb28-43"><a href="#cb28-43" aria-hidden="true" tabindex="-1"></a>           <span class="co"># the CfC table had this LAD down as Dundee</span></span>
+<span id="cb28-44"><a href="#cb28-44" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Dundee City"</span> <span class="sc">~</span> <span class="st">"Dundee"</span>,</span>
+<span id="cb28-45"><a href="#cb28-45" aria-hidden="true" tabindex="-1"></a>           <span class="co"># the CfC table had this LAD down as Edinburgh</span></span>
+<span id="cb28-46"><a href="#cb28-46" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"City of Edinburgh"</span> <span class="sc">~</span> <span class="st">"Edinburgh"</span>,</span>
+<span id="cb28-47"><a href="#cb28-47" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Exeter"</span> <span class="sc">~</span> <span class="st">"Exeter"</span>,</span>
+<span id="cb28-48"><a href="#cb28-48" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"East Dunbartonshire"</span> <span class="sc">~</span> <span class="st">"Glasgow"</span>,</span>
+<span id="cb28-49"><a href="#cb28-49" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"East Renfrewshire"</span> <span class="sc">~</span> <span class="st">"Glasgow"</span>,</span>
+<span id="cb28-50"><a href="#cb28-50" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Glasgow"</span> <span class="sc">~</span> <span class="st">"Glasgow"</span>,</span>
+<span id="cb28-51"><a href="#cb28-51" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Renfrewshire"</span> <span class="sc">~</span> <span class="st">"Glasgow"</span>,</span>
+<span id="cb28-52"><a href="#cb28-52" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Gloucester"</span> <span class="sc">~</span> <span class="st">"Gloucester"</span>,</span>
+<span id="cb28-53"><a href="#cb28-53" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Kirklees"</span> <span class="sc">~</span> <span class="st">"Huddersfield"</span>,</span>
+<span id="cb28-54"><a href="#cb28-54" aria-hidden="true" tabindex="-1"></a>           <span class="co"># the CfC table had this LAD down as Kingston upon Hull</span></span>
+<span id="cb28-55"><a href="#cb28-55" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Kingston upon Hull, City of"</span> <span class="sc">~</span> <span class="st">"Hull"</span>,</span>
+<span id="cb28-56"><a href="#cb28-56" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Ipswich"</span> <span class="sc">~</span> <span class="st">"Ipswich"</span>,</span>
+<span id="cb28-57"><a href="#cb28-57" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Leeds"</span> <span class="sc">~</span> <span class="st">"Leeds"</span>,</span>
+<span id="cb28-58"><a href="#cb28-58" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Blaby"</span> <span class="sc">~</span> <span class="st">"Leicester"</span>,</span>
+<span id="cb28-59"><a href="#cb28-59" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Leicester"</span> <span class="sc">~</span> <span class="st">"Leicester"</span>,</span>
+<span id="cb28-60"><a href="#cb28-60" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Oadby and Wigston"</span> <span class="sc">~</span> <span class="st">"Leicester"</span>,</span>
+<span id="cb28-61"><a href="#cb28-61" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Knowsley"</span> <span class="sc">~</span> <span class="st">"Liverpool"</span>,</span>
+<span id="cb28-62"><a href="#cb28-62" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Barking and Dagenham"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-63"><a href="#cb28-63" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Barnet"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-64"><a href="#cb28-64" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Bexley"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-65"><a href="#cb28-65" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Brent"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-66"><a href="#cb28-66" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Bromley"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-67"><a href="#cb28-67" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Broxbourne"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-68"><a href="#cb28-68" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Camden"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-69"><a href="#cb28-69" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"City of London"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-70"><a href="#cb28-70" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Croydon"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-71"><a href="#cb28-71" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Dartford"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-72"><a href="#cb28-72" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Ealing"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-73"><a href="#cb28-73" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Elmbridge"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-74"><a href="#cb28-74" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Enfield"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-75"><a href="#cb28-75" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Epping Forest"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-76"><a href="#cb28-76" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Epsom and Ewell"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-77"><a href="#cb28-77" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Gravesham"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-78"><a href="#cb28-78" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Greenwich"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-79"><a href="#cb28-79" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Hackney"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-80"><a href="#cb28-80" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Hammersmith and Fulham"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-81"><a href="#cb28-81" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Haringey"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-82"><a href="#cb28-82" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Harrow"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-83"><a href="#cb28-83" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Havering"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-84"><a href="#cb28-84" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Hertsmere"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-85"><a href="#cb28-85" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Hillingdon"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-86"><a href="#cb28-86" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Hounslow"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-87"><a href="#cb28-87" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Islington"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-88"><a href="#cb28-88" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Kensington and Chelsea"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-89"><a href="#cb28-89" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Kingston upon Thames"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-90"><a href="#cb28-90" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Lambeth"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-91"><a href="#cb28-91" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Lewisham"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-92"><a href="#cb28-92" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Merton"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-93"><a href="#cb28-93" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Newham"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-94"><a href="#cb28-94" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Redbridge"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-95"><a href="#cb28-95" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Richard upon Thames"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-96"><a href="#cb28-96" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Runnymede"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-97"><a href="#cb28-97" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Southwark"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-98"><a href="#cb28-98" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Spelthorne"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-99"><a href="#cb28-99" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Sutton"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-100"><a href="#cb28-100" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Three Rivers"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-101"><a href="#cb28-101" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Tower Hamlets"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-102"><a href="#cb28-102" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Waltham Forest"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-103"><a href="#cb28-103" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Wandsworth"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-104"><a href="#cb28-104" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Watford"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-105"><a href="#cb28-105" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Westminster"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-106"><a href="#cb28-106" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Woking"</span> <span class="sc">~</span> <span class="st">"London"</span>,</span>
+<span id="cb28-107"><a href="#cb28-107" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Luton"</span> <span class="sc">~</span> <span class="st">"Luton"</span>,</span>
+<span id="cb28-108"><a href="#cb28-108" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Bolton"</span> <span class="sc">~</span> <span class="st">"Manchester"</span>,</span>
+<span id="cb28-109"><a href="#cb28-109" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Bury"</span> <span class="sc">~</span> <span class="st">"Manchester"</span>,</span>
+<span id="cb28-110"><a href="#cb28-110" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Manchester"</span> <span class="sc">~</span> <span class="st">"Manchester"</span>,</span>
+<span id="cb28-111"><a href="#cb28-111" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Oldham"</span> <span class="sc">~</span> <span class="st">"Manchester"</span>,</span>
+<span id="cb28-112"><a href="#cb28-112" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Rochdale"</span> <span class="sc">~</span> <span class="st">"Manchester"</span>,</span>
+<span id="cb28-113"><a href="#cb28-113" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Salford"</span> <span class="sc">~</span> <span class="st">"Manchester"</span>,</span>
+<span id="cb28-114"><a href="#cb28-114" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Stockport"</span> <span class="sc">~</span> <span class="st">"Manchester"</span>,</span>
+<span id="cb28-115"><a href="#cb28-115" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Tameside"</span> <span class="sc">~</span> <span class="st">"Manchester"</span>,</span>
+<span id="cb28-116"><a href="#cb28-116" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Trafford"</span> <span class="sc">~</span> <span class="st">"Manchester"</span>,</span>
+<span id="cb28-117"><a href="#cb28-117" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Ashfield"</span> <span class="sc">~</span> <span class="st">"Mansfield"</span>,</span>
+<span id="cb28-118"><a href="#cb28-118" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Mansfield"</span> <span class="sc">~</span> <span class="st">"Mansfield"</span>,</span>
+<span id="cb28-119"><a href="#cb28-119" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Middlesbrough"</span> <span class="sc">~</span> <span class="st">"Middlesbrough"</span>,</span>
+<span id="cb28-120"><a href="#cb28-120" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Redcar and Cleveland"</span> <span class="sc">~</span> <span class="st">"Middlesbrough"</span>,</span>
+<span id="cb28-121"><a href="#cb28-121" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Stockton-on-Tees"</span> <span class="sc">~</span> <span class="st">"Middlesbrough"</span>,</span>
+<span id="cb28-122"><a href="#cb28-122" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Milton Keynes"</span> <span class="sc">~</span> <span class="st">"Milton Keynes"</span>,</span>
+<span id="cb28-123"><a href="#cb28-123" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Gateshead"</span> <span class="sc">~</span> <span class="st">"Newcastle"</span>,</span>
+<span id="cb28-124"><a href="#cb28-124" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Newcastle upon Tyne"</span> <span class="sc">~</span> <span class="st">"Newcastle"</span>,</span>
+<span id="cb28-125"><a href="#cb28-125" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"North Tyneside"</span> <span class="sc">~</span> <span class="st">"Newcastle"</span>,</span>
+<span id="cb28-126"><a href="#cb28-126" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"South Tyneside"</span> <span class="sc">~</span> <span class="st">"Newcastle"</span>,</span>
+<span id="cb28-127"><a href="#cb28-127" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Newport"</span> <span class="sc">~</span> <span class="st">"Newport"</span>,</span>
+<span id="cb28-128"><a href="#cb28-128" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Torfaen"</span> <span class="sc">~</span> <span class="st">"Newport"</span>,</span>
+<span id="cb28-129"><a href="#cb28-129" aria-hidden="true" tabindex="-1"></a>           <span class="co"># the CfC table only lists the LAD of West Northamptonshire</span></span>
+<span id="cb28-130"><a href="#cb28-130" aria-hidden="true" tabindex="-1"></a>           <span class="co"># this does not exist in the data</span></span>
+<span id="cb28-131"><a href="#cb28-131" aria-hidden="true" tabindex="-1"></a>           <span class="co"># only East Northamptonshire and Northampton exist</span></span>
+<span id="cb28-132"><a href="#cb28-132" aria-hidden="true" tabindex="-1"></a>           <span class="co"># this warrants further investigation</span></span>
+<span id="cb28-133"><a href="#cb28-133" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Northampton"</span> <span class="sc">~</span> <span class="st">"Northampton"</span>,</span>
+<span id="cb28-134"><a href="#cb28-134" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Broadland"</span> <span class="sc">~</span> <span class="st">"Norwich"</span>,</span>
+<span id="cb28-135"><a href="#cb28-135" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Norwich"</span> <span class="sc">~</span> <span class="st">"Norwich"</span>,</span>
+<span id="cb28-136"><a href="#cb28-136" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Broxtowe"</span> <span class="sc">~</span> <span class="st">"Nottingham"</span>,</span>
+<span id="cb28-137"><a href="#cb28-137" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Erewash"</span> <span class="sc">~</span> <span class="st">"Nottingham"</span>,</span>
+<span id="cb28-138"><a href="#cb28-138" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Gedling"</span> <span class="sc">~</span> <span class="st">"Nottingham"</span>,</span>
+<span id="cb28-139"><a href="#cb28-139" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Nottingham"</span> <span class="sc">~</span> <span class="st">"Nottingham"</span>,</span>
+<span id="cb28-140"><a href="#cb28-140" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Oxford"</span> <span class="sc">~</span> <span class="st">"Oxford"</span>,</span>
+<span id="cb28-141"><a href="#cb28-141" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Peterborough"</span> <span class="sc">~</span> <span class="st">"Peterborough"</span>,</span>
+<span id="cb28-142"><a href="#cb28-142" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Plymouth"</span> <span class="sc">~</span> <span class="st">"Plymouth"</span>,</span>
+<span id="cb28-143"><a href="#cb28-143" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Portsmouth"</span> <span class="sc">~</span> <span class="st">"Portsmouth"</span>,</span>
+<span id="cb28-144"><a href="#cb28-144" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Fareham"</span> <span class="sc">~</span> <span class="st">"Portsmouth"</span>,</span>
+<span id="cb28-145"><a href="#cb28-145" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Gosport"</span> <span class="sc">~</span> <span class="st">"Portsmouth"</span>,</span>
+<span id="cb28-146"><a href="#cb28-146" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Havant"</span> <span class="sc">~</span> <span class="st">"Portsmouth"</span>,</span>
+<span id="cb28-147"><a href="#cb28-147" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Chorley"</span> <span class="sc">~</span> <span class="st">"Preston"</span>,</span>
+<span id="cb28-148"><a href="#cb28-148" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Preston"</span> <span class="sc">~</span> <span class="st">"Preston"</span>,</span>
+<span id="cb28-149"><a href="#cb28-149" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"South Ribble"</span> <span class="sc">~</span> <span class="st">"Preston"</span>,</span>
+<span id="cb28-150"><a href="#cb28-150" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Reading"</span> <span class="sc">~</span> <span class="st">"Reading"</span>,</span>
+<span id="cb28-151"><a href="#cb28-151" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Wokingham"</span> <span class="sc">~</span> <span class="st">"Reading"</span>,</span>
+<span id="cb28-152"><a href="#cb28-152" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Rotherham"</span> <span class="sc">~</span> <span class="st">"Sheffield"</span>,</span>
+<span id="cb28-153"><a href="#cb28-153" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Sheffield"</span> <span class="sc">~</span> <span class="st">"Sheffield"</span>,</span>
+<span id="cb28-154"><a href="#cb28-154" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Slough"</span> <span class="sc">~</span> <span class="st">"Slough"</span>,</span>
+<span id="cb28-155"><a href="#cb28-155" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Eastleigh"</span> <span class="sc">~</span> <span class="st">"Southampton"</span>,</span>
+<span id="cb28-156"><a href="#cb28-156" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Southampton"</span> <span class="sc">~</span> <span class="st">"Southampton"</span>,</span>
+<span id="cb28-157"><a href="#cb28-157" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Castlepoint"</span> <span class="sc">~</span> <span class="st">"Southend"</span>,</span>
+<span id="cb28-158"><a href="#cb28-158" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Southend-on-Sea"</span> <span class="sc">~</span> <span class="st">"Southend"</span>,</span>
+<span id="cb28-159"><a href="#cb28-159" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Rochford"</span> <span class="sc">~</span> <span class="st">"Southend"</span>,</span>
+<span id="cb28-160"><a href="#cb28-160" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Newcastle-under-Lyme"</span> <span class="sc">~</span> <span class="st">"Stoke"</span>,</span>
+<span id="cb28-161"><a href="#cb28-161" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Stoke-on-Trent"</span> <span class="sc">~</span> <span class="st">"Stoke"</span>,</span>
+<span id="cb28-162"><a href="#cb28-162" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Sunderland"</span> <span class="sc">~</span> <span class="st">"Sunderland"</span>,</span>
+<span id="cb28-163"><a href="#cb28-163" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Neath Port Talbot"</span> <span class="sc">~</span> <span class="st">"Swansea"</span>,</span>
+<span id="cb28-164"><a href="#cb28-164" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Swansea"</span> <span class="sc">~</span> <span class="st">"Swansea"</span>,</span>
+<span id="cb28-165"><a href="#cb28-165" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Swindon"</span> <span class="sc">~</span> <span class="st">"Swindon"</span>,</span>
+<span id="cb28-166"><a href="#cb28-166" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Telford and Wrekin"</span> <span class="sc">~</span> <span class="st">"Telford"</span>,</span>
+<span id="cb28-167"><a href="#cb28-167" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Wakefield"</span> <span class="sc">~</span> <span class="st">"Wakefield"</span>,</span>
+<span id="cb28-168"><a href="#cb28-168" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Warrington"</span> <span class="sc">~</span> <span class="st">"Warrington"</span>,</span>
+<span id="cb28-169"><a href="#cb28-169" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Wigan"</span> <span class="sc">~</span> <span class="st">"Wigan"</span>,</span>
+<span id="cb28-170"><a href="#cb28-170" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"Worthing"</span> <span class="sc">~</span> <span class="st">"Worthing"</span>,</span>
+<span id="cb28-171"><a href="#cb28-171" aria-hidden="true" tabindex="-1"></a>           lad_name <span class="sc">==</span> <span class="st">"York"</span> <span class="sc">~</span> <span class="st">"York"</span></span>
+<span id="cb28-172"><a href="#cb28-172" aria-hidden="true" tabindex="-1"></a>          ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>idaci <span class="sc">%&gt;%</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(pua, idaci_decile) <span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(pua) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percentage =</span> (n<span class="sc">/</span><span class="fu">sum</span>(n)) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(idaci_decile <span class="sc">%in%</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(idaci_decile, <span class="fu">desc</span>(percentage)) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 106 × 3
+   pua           idaci_decile percentage
+   &lt;chr&gt;                &lt;dbl&gt;      &lt;dbl&gt;
+ 1 Liverpool                1       44.9
+ 2 Hull                     1       38.0
+ 3 Middlesbrough            1       30.6
+ 4 Sunderland               1       25.9
+ 5 Birmingham               1       25.5
+ 6 Birkenhead               1       23.3
+ 7 Newcastle                1       22.1
+ 8 Blackpool                1       22.1
+ 9 Doncaster                1       20.6
+10 Sheffield                1       20.1
+# ℹ 96 more rows</code></pre>
+</div>
+</div>
+<p>The children-specific index would suggest that the most relevant cities for our purposes are: 1. Liverpool 2. Hull 3. Birmingham 4. Blackburn 5. Bradford</p>
 </section>
 <section id="cross-checking-with-harmonised-imd-data" class="level3">
 <h3 class="anchored" data-anchor-id="cross-checking-with-harmonised-imd-data">Cross-checking with harmonised IMD data</h3>

@@ -19,7 +19,7 @@ To-do:
 Identification of **5-10 cities** of interest across at least 2 countries in the UK.
 
 ## What is a city?
-A practical answer to this complicated question comes from the [Centre for Cities](https://www.centreforcities.org): they have selected the UK's 63 largest cities and towns, which they have defined as Primary Output Areas (PUAs).
+A practical answer to this complicated question comes from the [Centre for Cities](https://www.centreforcities.org): they have selected the UK's 63 largest cities and towns, which they have defined as Primary Urban Areas (PUAs).
 As explained on their website:
 
 > This is a measure of the “built-up” area of a large city or town, rather than individual local authority districts.
@@ -400,9 +400,219 @@ This could be beneficial for the success of the project, as PGPs will have to be
 Additionally, this dataset has many limitations, one of which being that the play areas included in the dataset could be private.
 
 
-### Cross-checking with Children's IMD (England)
+### Cross-checking with Income Deprivation Affecting Children Index (IDACI; England)
 
+This data relates to the [English indices of deprivation 2019](https://www.gov.uk/government/statistics/english-indices-of-deprivation-2019).
 
+The data was downloaded from the GOV.UK website and was made available by the Ministry of Housing, Communities & Local Government.
 
-### Cross-checking with harmonised IMD data
+```{r}
+#| echo: true
+
+excel_sheets(here("data-raw", "File_3_-_IoD2019_Supplementary_Indices_-_IDACI_and_IDAOPI.xlsx"))
+```
+```{r}
+#| echo: true
+
+idaci_idaopi <- read_excel(here("data-raw", "File_3_-_IoD2019_Supplementary_Indices_-_IDACI_and_IDAOPI.xlsx"),
+                              sheet = 2) %>% 
+  clean_names()
+
+names(idaci_idaopi)
+```
+```{r}
+#| echo: true
+#| code-fold: true
+
+idaci <- idaci_idaopi %>% 
+  select(lsoa_code = lsoa_code_2011,
+         lsoa_name = lsoa_name_2011,
+         lad_name = local_authority_district_name_2019,
+         lad_code = local_authority_district_code_2019,
+         imd_rank = index_of_multiple_deprivation_imd_rank_where_1_is_most_deprived,
+         imd_decile = index_of_multiple_deprivation_imd_decile_where_1_is_most_deprived_10_percent_of_lso_as,
+         idaci_rank = income_deprivation_affecting_children_index_idaci_rank_where_1_is_most_deprived,
+         idaci_decile = income_deprivation_affecting_children_index_idaci_decile_where_1_is_most_deprived_10_percent_of_lso_as) %>% 
+  mutate(pua = case_when(
+    # the CfC table had this LAD down as Aberdeen. ideally check if Aberdeen City is what is meant, as there is also Aberdeenshire
+           lad_name == "Aberdeen City" ~ "Aberdeen",
+           lad_name == "Rusmoor" ~ "Aldershot",
+           lad_name == "Surrey Heath" ~ "Aldershot",
+           lad_name == "Barnsley" ~ "Barnsley",
+           lad_name == "Basildon" ~ "Basildon",
+           lad_name == "Wirral" ~ "Birkenhead",
+           lad_name == "Birmingham" ~ "Birmingham",
+           lad_name == "Dudley" ~ "Birmingham",
+           lad_name == "Sandwell" ~ "Birmingham",
+           lad_name == "Solihull" ~ "Birmingham",
+           lad_name == "Walsall" ~ "Birmingham",
+           lad_name == "Wolverhampton" ~ "Birmingham",
+           lad_name == "Blackburn with Darwen" ~ "Blackburn",
+           lad_name == "Blackpool" ~ "Blackpool",
+           lad_name == "Fylde" ~ "Blackpool",
+           lad_name == "Dorset" ~ "Bournemouth",
+           lad_name == "Bournemouth, Christchurch and Poole" ~ "Bournemouth",
+           lad_name == "Bradford" ~ "Bradford",
+           lad_name == "Adur" ~ "Brighton",
+           lad_name == "Brighton and Hove" ~ "Brighton",
+           lad_name == "City of Bristol" ~ "Bristol",
+           lad_name == "South Gloucestershire" ~ "Bristol",
+           lad_name == "Burnley" ~ "Burnley",
+           lad_name == "Pendle" ~ "Burnley",
+           lad_name == "Cambridge" ~ "Cambridge",
+           lad_name == "Cardiff" ~ "Cardiff",
+           lad_name == "Medway" ~ "Chatham",
+           lad_name == "Coventry" ~ "Coventry",
+           lad_name == "Crawley" ~ "Crawley",
+           lad_name == "Derby" ~ "Derby",
+           lad_name == "Doncaster" ~ "Doncaster",
+           # the CfC table had this LAD down as Dundee
+           lad_name == "Dundee City" ~ "Dundee",
+           # the CfC table had this LAD down as Edinburgh
+           lad_name == "City of Edinburgh" ~ "Edinburgh",
+           lad_name == "Exeter" ~ "Exeter",
+           lad_name == "East Dunbartonshire" ~ "Glasgow",
+           lad_name == "East Renfrewshire" ~ "Glasgow",
+           lad_name == "Glasgow" ~ "Glasgow",
+           lad_name == "Renfrewshire" ~ "Glasgow",
+           lad_name == "Gloucester" ~ "Gloucester",
+           lad_name == "Kirklees" ~ "Huddersfield",
+           # the CfC table had this LAD down as Kingston upon Hull
+           lad_name == "Kingston upon Hull, City of" ~ "Hull",
+           lad_name == "Ipswich" ~ "Ipswich",
+           lad_name == "Leeds" ~ "Leeds",
+           lad_name == "Blaby" ~ "Leicester",
+           lad_name == "Leicester" ~ "Leicester",
+           lad_name == "Oadby and Wigston" ~ "Leicester",
+           lad_name == "Knowsley" ~ "Liverpool",
+           lad_name == "Barking and Dagenham" ~ "London",
+           lad_name == "Barnet" ~ "London",
+           lad_name == "Bexley" ~ "London",
+           lad_name == "Brent" ~ "London",
+           lad_name == "Bromley" ~ "London",
+           lad_name == "Broxbourne" ~ "London",
+           lad_name == "Camden" ~ "London",
+           lad_name == "City of London" ~ "London",
+           lad_name == "Croydon" ~ "London",
+           lad_name == "Dartford" ~ "London",
+           lad_name == "Ealing" ~ "London",
+           lad_name == "Elmbridge" ~ "London",
+           lad_name == "Enfield" ~ "London",
+           lad_name == "Epping Forest" ~ "London",
+           lad_name == "Epsom and Ewell" ~ "London",
+           lad_name == "Gravesham" ~ "London",
+           lad_name == "Greenwich" ~ "London",
+           lad_name == "Hackney" ~ "London",
+           lad_name == "Hammersmith and Fulham" ~ "London",
+           lad_name == "Haringey" ~ "London",
+           lad_name == "Harrow" ~ "London",
+           lad_name == "Havering" ~ "London",
+           lad_name == "Hertsmere" ~ "London",
+           lad_name == "Hillingdon" ~ "London",
+           lad_name == "Hounslow" ~ "London",
+           lad_name == "Islington" ~ "London",
+           lad_name == "Kensington and Chelsea" ~ "London",
+           lad_name == "Kingston upon Thames" ~ "London",
+           lad_name == "Lambeth" ~ "London",
+           lad_name == "Lewisham" ~ "London",
+           lad_name == "Merton" ~ "London",
+           lad_name == "Newham" ~ "London",
+           lad_name == "Redbridge" ~ "London",
+           lad_name == "Richard upon Thames" ~ "London",
+           lad_name == "Runnymede" ~ "London",
+           lad_name == "Southwark" ~ "London",
+           lad_name == "Spelthorne" ~ "London",
+           lad_name == "Sutton" ~ "London",
+           lad_name == "Three Rivers" ~ "London",
+           lad_name == "Tower Hamlets" ~ "London",
+           lad_name == "Waltham Forest" ~ "London",
+           lad_name == "Wandsworth" ~ "London",
+           lad_name == "Watford" ~ "London",
+           lad_name == "Westminster" ~ "London",
+           lad_name == "Woking" ~ "London",
+           lad_name == "Luton" ~ "Luton",
+           lad_name == "Bolton" ~ "Manchester",
+           lad_name == "Bury" ~ "Manchester",
+           lad_name == "Manchester" ~ "Manchester",
+           lad_name == "Oldham" ~ "Manchester",
+           lad_name == "Rochdale" ~ "Manchester",
+           lad_name == "Salford" ~ "Manchester",
+           lad_name == "Stockport" ~ "Manchester",
+           lad_name == "Tameside" ~ "Manchester",
+           lad_name == "Trafford" ~ "Manchester",
+           lad_name == "Ashfield" ~ "Mansfield",
+           lad_name == "Mansfield" ~ "Mansfield",
+           lad_name == "Middlesbrough" ~ "Middlesbrough",
+           lad_name == "Redcar and Cleveland" ~ "Middlesbrough",
+           lad_name == "Stockton-on-Tees" ~ "Middlesbrough",
+           lad_name == "Milton Keynes" ~ "Milton Keynes",
+           lad_name == "Gateshead" ~ "Newcastle",
+           lad_name == "Newcastle upon Tyne" ~ "Newcastle",
+           lad_name == "North Tyneside" ~ "Newcastle",
+           lad_name == "South Tyneside" ~ "Newcastle",
+           lad_name == "Newport" ~ "Newport",
+           lad_name == "Torfaen" ~ "Newport",
+           # the CfC table only lists the LAD of West Northamptonshire
+           # this does not exist in the data
+           # only East Northamptonshire and Northampton exist
+           # this warrants further investigation
+           lad_name == "Northampton" ~ "Northampton",
+           lad_name == "Broadland" ~ "Norwich",
+           lad_name == "Norwich" ~ "Norwich",
+           lad_name == "Broxtowe" ~ "Nottingham",
+           lad_name == "Erewash" ~ "Nottingham",
+           lad_name == "Gedling" ~ "Nottingham",
+           lad_name == "Nottingham" ~ "Nottingham",
+           lad_name == "Oxford" ~ "Oxford",
+           lad_name == "Peterborough" ~ "Peterborough",
+           lad_name == "Plymouth" ~ "Plymouth",
+           lad_name == "Portsmouth" ~ "Portsmouth",
+           lad_name == "Fareham" ~ "Portsmouth",
+           lad_name == "Gosport" ~ "Portsmouth",
+           lad_name == "Havant" ~ "Portsmouth",
+           lad_name == "Chorley" ~ "Preston",
+           lad_name == "Preston" ~ "Preston",
+           lad_name == "South Ribble" ~ "Preston",
+           lad_name == "Reading" ~ "Reading",
+           lad_name == "Wokingham" ~ "Reading",
+           lad_name == "Rotherham" ~ "Sheffield",
+           lad_name == "Sheffield" ~ "Sheffield",
+           lad_name == "Slough" ~ "Slough",
+           lad_name == "Eastleigh" ~ "Southampton",
+           lad_name == "Southampton" ~ "Southampton",
+           lad_name == "Castlepoint" ~ "Southend",
+           lad_name == "Southend-on-Sea" ~ "Southend",
+           lad_name == "Rochford" ~ "Southend",
+           lad_name == "Newcastle-under-Lyme" ~ "Stoke",
+           lad_name == "Stoke-on-Trent" ~ "Stoke",
+           lad_name == "Sunderland" ~ "Sunderland",
+           lad_name == "Neath Port Talbot" ~ "Swansea",
+           lad_name == "Swansea" ~ "Swansea",
+           lad_name == "Swindon" ~ "Swindon",
+           lad_name == "Telford and Wrekin" ~ "Telford",
+           lad_name == "Wakefield" ~ "Wakefield",
+           lad_name == "Warrington" ~ "Warrington",
+           lad_name == "Wigan" ~ "Wigan",
+           lad_name == "Worthing" ~ "Worthing",
+           lad_name == "York" ~ "York"
+          ))
+```
+
+```{r}
+idaci %>% 
+  count(pua, idaci_decile) %>%
+  group_by(pua) %>% 
+  mutate(percentage = (n/sum(n)) * 100) %>% 
+  ungroup() %>% 
+  filter(idaci_decile %in% 1:2) %>% 
+  arrange(idaci_decile, desc(percentage)) %>% 
+  select(-n)
+```
+
+The children-specific index would suggest that the most relevant cities for our purposes are:
+1. Liverpool
+2. Hull
+3. Birmingham
+4. Blackburn
+5. Bradford
 
