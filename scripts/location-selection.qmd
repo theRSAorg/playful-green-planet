@@ -6,38 +6,54 @@ format:
   html:
     theme: flatly
     toc: true
+css: styles.css
 ---
 
-<!--
-To-do:
-- make structure
-- do the things needed in each section :D
-- make custom RSA theme
--->
-
 ## The brief
-Identification of **5-10 cities** of interest across at least 2 countries in the UK.
+
+The RSA is applying for funding to run a Playful Green Planet (PGP) pilot in one or two locations in the UK.
+Ideal locations for a pilot will be places that are experiencing high levels of deprivation and have low access to green spaces.
+PGP locations will be a collaboration between the RSA, our partners and the local community where the pilots will run.
+A PGP Stewart (most likely an RSA Fellow) will be pivotal for establishing a connection with place.
+As such, we are looking for **5-10 cities across at least 2 countries in the UK** to open up a call for Stewards.
 
 ## What is a city?
-A practical answer to this complicated question comes from the [Centre for Cities](https://www.centreforcities.org): they have selected the UK's 63 largest cities and towns, which they have defined as Primary Urban Areas (PUAs).
+
+The first thing to establish is the type of area we will be targetting.
+A practical answer to the complicated question of how to define a city comes from the [Centre for Cities](https://www.centreforcities.org).
+They have selected the UK's 63 largest cities and towns, which they have defined as Primary Urban Areas (PUAs).
 As explained on their website:
 
 > This is a measure of the “built-up” area of a large city or town, rather than individual local authority districts.
 > We use PUAs in our analysis because they provide a consistent measure to compare concentrations of economic activity across the UK.
 > This makes them distinct from city region or combined authority geographies.
 
-Following this methodology, the process presented here limits itself to these 63 PUAs.
-This excludes more rural areas, which could be problematic.
-On the one hand, these places are likely to have better access to green spaces.
+This report adopts the methodology of the Centre for Cities and limits itself to the 63 PUAs.
+Clearly, this excludes rural areas.
+This should not be a problem for the purposes of PGP, as rural areas are likely to have better access to green spaces.
 On the other hand, these green spaces may not be suitable for children to play in.
-Additionally, rural places can suffer from high levels of deprivation.
+Rural places could also suffer from high levels of deprivation.
+The question of whether rural areas should be excluded from consideration for PGP projects should be considered; however, for the purposes of this pilot restricting consideration to urban areas can be justified.
+
+Another limitation of this approach is that the vast majority of the 63 PUAs is located in England:
+
+- 1 PUA in Northern Ireland (Belfast)
+- 3 PUAs in Wales (Cardiff, Newport, Swansea)
+- 4 PUAs in Scotland (Aberdeen, Dundee, Edinburgh, Glasgow)
+- 55 PUAs in England
 
 ## Place selection
 
+The primary considerations in selecting candidate PGP locations are:
+1. high levels of deprivation, as measured by the Index of Multiple Deprivation and, where applicable, the Income  Affecting Children Index
+2. access to green spaces.
+
 ### Index of Multiple Deprivation & Access to Nature
 
-The data presented below comes from the ONS and relates to [Access to gardens and public green space in Great Britain](https://www.ons.gov.uk/economy/environmentalaccounts/datasets/accesstogardensandpublicgreenspaceingreatbritain).
+The data presented below, [Access to gardens and public green space in Great Britain](https://www.ons.gov.uk/economy/environmentalaccounts/datasets/accesstogardensandpublicgreenspaceingreatbritain), comes from the ONS website and contains information on both deprivation and access to nature.
 
+The data explored here relates to green space that is a public park, a public garden, or a playing field (public or private).
+There is also data available on private gardens, but there was not sufficient time to explore that data.
 
 ```{r}
 #| echo: true
@@ -52,23 +68,24 @@ library(tidyr)
 library(ggplot2)
 ```
 
-This file contains the following sheets:
+The spreadsheet on public parks, public gardens, and playing fields contains the following sheets:
 
 ```{r}
 #| echo: true
 
 excel_sheets(here("data-raw", "ospublicgreenspacereferencetables.xlsx"))
 ```
-#### Index of Multiple Deprivation
 
 To answer the question we're interested in ("Which are the most deprived cities in the UK?") we need to:
 
 1. combine Local Authority Districts (LADs) into Primary Urban Areas (PUAs)
-2. calculate the level of deprivation in each PUA, taking into account that deprivation is measured on the level of LSOA
+2. calculate the level of deprivation in each PUA, taking into account that deprivation is measured on the level of LSOAs (Lower layer Super Output Areas)
 3. order PUAs in order of deprivation
 
 Let's start by looking at the data in sheet number nine, *LSOA Parks and Playing Fields*.
-This is a sensible starting point because it is where the data that contains information on how deprived each LSOA is.
+This is a sensible starting point because 1) it has the more expansive definition of green space and 2) the LSOA level is where the deprivation data is included.
+
+#### Index of Multiple Deprivation
 
 ```{r}
 #| echo: true
@@ -78,12 +95,16 @@ lsoa_parks_play <- read_excel(here("data-raw", "ospublicgreenspacereferencetable
   clean_names() %>% 
   drop_na(country_code)
 
-dim(lsoa_parks_play)
-names(lsoa_parks_play)
+lsoa_parks_play_dim <- dim(lsoa_parks_play)
+lsoa_parks_play_names <- names(lsoa_parks_play)
 ```
+
+The dataset contains information on `r lsoa_parks_play_dim[1]` LSOAs in England, Scotland, and Wales.
+Note that no information on Northern Ireland is contained in this dataset.
+
 The next step is to combine LADs (and their component LSOAs) into PUAs.
 This is done using the [Centre for Cities 2022 Table](https://www.centreforcities.org/wp-content/uploads/2022/08/2022-PUA-Table.pdf).
-The code doing this is very long, but essentially what it does is create a new variable called  `PUA` and assigns a value to it depending on the LAD name associated with each obswervation.
+The code doing this is hidden because it is very long, but essentially what it does is create a new variable called  `PUA` and assigns a value to it depending on the LAD name associated with each observation.
 
 ```{r}
 #| echo: true
@@ -255,7 +276,8 @@ puas <- lsoa_parks_play %>%
           ))
 ```
 
-Note that there are LSOAs that don't belong to a PUA.
+As mentioned previously, PUAs are defined as the largest cities and towns in the UK.
+As such, there are LSOAs in rural areas that do not belong to any of the PUAs.
 These are dropped here.
 
 ```{r}
@@ -263,12 +285,10 @@ puas <- puas %>%
   drop_na(PUA)
 ```
 
-
 Following procedure used in the RSA's [UK Urban Futures Commission report](https://www.thersa.org/design-for-life-our-mission/hubs/uk-urban-futures-commission), relative deprivation for each PUA is determined by the percentage of LSOAs that are in the most deprived deciles.
 
 ```{r}
 #| echo: true
-#| code-fold: true
 
 pua_imd <- puas %>%
   count(country_name, PUA, index_of_multiple_deprivation_decile_country_specific) %>% 
@@ -283,14 +303,18 @@ These PUAs are then displayed for each country in Great Britain.
 
 England:
 
+:::{.scrolling}
 ```{r}
 #| echo: true
 
 pua_imd %>% 
   filter(country_name == "England") %>% 
-  arrange(index_of_multiple_deprivation_decile_country_specific, desc(percentage)) %>% 
-  select(-n)
+  rename(imd_decile = index_of_multiple_deprivation_decile_country_specific) %>% 
+  arrange(imd_decile, desc(percentage)) %>% 
+  select(-n) %>% 
+  knitr::kable()
 ```
+:::
 
 Scotland: 
 
@@ -299,8 +323,10 @@ Scotland:
 
 pua_imd %>% 
   filter(country_name == "Scotland") %>% 
-  arrange(index_of_multiple_deprivation_decile_country_specific, desc(percentage)) %>% 
-  select(-n)
+  rename(imd_decile = index_of_multiple_deprivation_decile_country_specific) %>% 
+  arrange(imd_decile, desc(percentage)) %>% 
+  select(-n) %>% 
+  knitr::kable()
 ```
 
 Wales:
@@ -310,20 +336,15 @@ Wales:
 
 pua_imd %>% 
   filter(country_name == "Wales") %>% 
-  arrange(index_of_multiple_deprivation_decile_country_specific, desc(percentage)) %>% 
-  select(-n)
+  rename(imd_decile = index_of_multiple_deprivation_decile_country_specific) %>% 
+  arrange(imd_decile, desc(percentage)) %>% 
+  select(-n) %>% 
+  knitr::kable()
 ```
-The first thing to note is that Scotland and Wales have a much smaller number of PUAs.
-There are four in Scotland (Aberdeen, Dundee, Edinburgh and Glasgow) and three in Wales (Cardiff, Newport and Swansea).
 
 ##### Summary
 
-In Scotland, **Dundee** faces by far the highest levels of deprivation, compared to Glasgow, Edinburgh and Aberdeen, and would be the best target in Scotland, if we were to pick only one.
-
-In Wales, the three PUAs are not as dissimilar in terms of deprivation as they were in Scotland.
-That being said, **Newport** is experiencing the highest levels of deprivation, with Cardiff and Swansea following.
-
-The vast majority of PUAs is located in England. In order of deprivation, again looking at the top two deciles,:
+In England the PUAs experiencing the highest levels of deprivation (percentage of LSOAs in the two most deprived deciles) are:
 
 1. **Liverpool**
 2. **Blackburn**
@@ -333,6 +354,12 @@ The vast majority of PUAs is located in England. In order of deprivation, again 
 6. Burnley
 7. Peterborough
 
+In Scotland, **Dundee** faces by far the highest levels of deprivation, followed (distantly) by Glasgow, Edinburgh and Aberdeen.
+If we were to pick only one location in Scotland, Dundee would be the best one.
+
+In Wales, the three PUAs are not as dissimilar in terms of deprivation as they are in Scotland.
+That being said, **Newport** is experiencing the highest levels of deprivation, with Cardiff and Swansea following.
+
 #### Access to Nature
 
 Let's now focus on what access people have to green spaces.
@@ -340,10 +367,13 @@ It should be noted that parks and public gardens will be public, but playing fie
 
 ```{r}
 #| echo: true
+#| output: false
 
-names(puas)
+lsoa_parks_play_names
 ```
 Looking at the variables included in this dataset again, the variables `average_distance_to_nearest_park_public_garden_or_playing_field_m` and `average_size_of_nearest_park_public_garden_or_playing_field_m2` seem like the most promising for our purposes.
+
+:::{.scrolling}
 
 ```{r}
 #| echo: true
@@ -360,9 +390,15 @@ puas %>%
   geom_histogram(binwidth = .5)
 
 ```
-It looks like the vast majority of green spaces are at a distance of no more than 1400m.
+:::
+
+It looks like the vast majority of green spaces are at a distance of no more than 1500m.
+Most are also reasonably small.
+
 The following plot shows the distribution of distances to nearest green spaces for each PUA.
 To make it easier to parse the plot, distances over 1500m have been excluded.
+Its purpose is to understand how evenly distributed distances in to green spaces in each LSOA are.
+London, Manchester and Birmingham look different to the rest because they are comprised of a vastly larger number of LSOAs.
 
 ```{r}
 puas %>% 
@@ -371,7 +407,7 @@ puas %>%
   geom_histogram(binwidth = 10) +
   facet_wrap(~PUA)
 ```
-
+:::{.scrolling}
 
 ```{r}
 puas %>% 
@@ -380,8 +416,11 @@ puas %>%
             median_size_gs = median(average_size_of_nearest_park_public_garden_or_playing_field_m2),
             mean_distance_to_gs = mean(average_distance_to_nearest_park_public_garden_or_playing_field_m),
             mean_size_gs = mean(average_size_of_nearest_park_public_garden_or_playing_field_m2)) %>%
-  arrange(desc(median_distance_to_gs))
+  arrange(desc(median_distance_to_gs)) %>% 
+  knitr::kable()
 ```
+
+:::
 
 ##### Summary
 
@@ -408,11 +447,13 @@ The data was downloaded from the GOV.UK website and was made available by the Mi
 
 ```{r}
 #| echo: true
+#| output: false
 
 excel_sheets(here("data-raw", "File_3_-_IoD2019_Supplementary_Indices_-_IDACI_and_IDAOPI.xlsx"))
 ```
 ```{r}
 #| echo: true
+#| output: false
 
 idaci_idaopi <- read_excel(here("data-raw", "File_3_-_IoD2019_Supplementary_Indices_-_IDACI_and_IDAOPI.xlsx"),
                               sheet = 2) %>% 
@@ -598,6 +639,8 @@ idaci <- idaci_idaopi %>%
           ))
 ```
 
+:::{.scrolling}
+
 ```{r}
 idaci %>% 
   count(pua, idaci_decile) %>%
@@ -606,13 +649,31 @@ idaci %>%
   ungroup() %>% 
   filter(idaci_decile %in% 1:2) %>% 
   arrange(idaci_decile, desc(percentage)) %>% 
-  select(-n)
+  select(-n) %>% 
+  knitr::kable()
 ```
+:::
 
 The children-specific index would suggest that the most relevant cities for our purposes are:
+
 1. Liverpool
 2. Hull
 3. Birmingham
 4. Blackburn
 5. Bradford
+
+## Candidate places
+
+| Country    | PUA               |
+|------------|-------------------|
+| England    | Hull              |
+| England    | Liverpool         |
+| England    | Birmingham        |
+| England    | Blackburn         |
+| England    | Bradford          |
+| Scotland   | Dundee            |
+| Scotland   | Glasgow           |
+| Wales      | Newport           |
+| Wales      | Cardiff           |
+| N. Ireland | Belfast           |
 
