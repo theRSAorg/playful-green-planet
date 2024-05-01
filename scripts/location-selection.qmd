@@ -37,6 +37,8 @@ Additionally, rural places can suffer from high levels of deprivation.
 ## Place selection
 
 ### Index of Multiple Deprivation & Access to Nature
+
+#### Index of Multiple Deprivation
 The data presented below comes from the ONS and relates to [Access to gardens and public green space in Great Britain](https://www.ons.gov.uk/economy/environmentalaccounts/datasets/accesstogardensandpublicgreenspaceingreatbritain).
 
 
@@ -50,6 +52,7 @@ library(readxl)
 library(dplyr)
 library(janitor)
 library(tidyr)
+library(ggplot2)
 ```
 
 This file contains the following sheets:
@@ -73,7 +76,8 @@ This is a sensible starting point because it is where the data that contains inf
 
 lsoa_parks_play <- read_excel(here("data-raw", "ospublicgreenspacereferencetables.xlsx"),
                               sheet = 9) %>% 
-  clean_names()
+  clean_names() %>% 
+  drop_na(country_code)
 
 dim(lsoa_parks_play)
 names(lsoa_parks_play)
@@ -88,7 +92,8 @@ The code doing this is very long, but essentially what it does is create a new v
 
 puas <- lsoa_parks_play %>% 
   mutate(PUA = case_when(
-           lad_name == "Aberdeen" ~ "Aberdeen",
+    # the CfC table had this LAD down as Aberdeen. ideally check if Aberdeen City is what is meant, as there is also Aberdeenshire
+           lad_name == "Aberdeen City" ~ "Aberdeen",
            lad_name == "Rusmoor" ~ "Aldershot",
            lad_name == "Surrey Heath" ~ "Aldershot",
            lad_name == "Barnsley" ~ "Barnsley",
@@ -119,8 +124,10 @@ puas <- lsoa_parks_play %>%
            lad_name == "Crawley" ~ "Crawley",
            lad_name == "Derby" ~ "Derby",
            lad_name == "Doncaster" ~ "Doncaster",
-           lad_name == "Dundee" ~ "Dundee",
-           lad_name == "Edinburgh" ~ "Edinburgh",
+           # the CfC table had this LAD down as Dundee
+           lad_name == "Dundee City" ~ "Dundee",
+           # the CfC table had this LAD down as Edinburgh
+           lad_name == "City of Edinburgh" ~ "Edinburgh",
            lad_name == "Exeter" ~ "Exeter",
            lad_name == "East Dunbartonshire" ~ "Glasgow",
            lad_name == "East Renfrewshire" ~ "Glasgow",
@@ -128,7 +135,8 @@ puas <- lsoa_parks_play %>%
            lad_name == "Renfrewshire" ~ "Glasgow",
            lad_name == "Gloucester" ~ "Gloucester",
            lad_name == "Kirklees" ~ "Huddersfield",
-           lad_name == "Kingston upon Hull" ~ "Hull",
+           # the CfC table had this LAD down as Kingston upon Hull
+           lad_name == "Kingston upon Hull, City of" ~ "Hull",
            lad_name == "Ipswich" ~ "Ipswich",
            lad_name == "Leeds" ~ "Leeds",
            lad_name == "Blaby" ~ "Leicester",
@@ -202,7 +210,11 @@ puas <- lsoa_parks_play %>%
            lad_name == "South Tyneside" ~ "Newcastle",
            lad_name == "Newport" ~ "Newport",
            lad_name == "Torfaen" ~ "Newport",
-           lad_name == "West Northamptonshire" ~ "Northampton",
+           # the CfC table only lists the LAD of West Northamptonshire
+           # this does not exist in the data
+           # only East Northamptonshire and Northampton exist
+           # this warrants further investigation
+           lad_name == "Northampton" ~ "Northampton",
            lad_name == "Broadland" ~ "Norwich",
            lad_name == "Norwich" ~ "Norwich",
            lad_name == "Broxtowe" ~ "Nottingham",
@@ -244,6 +256,15 @@ puas <- lsoa_parks_play %>%
           ))
 ```
 
+Note that there are LSOAs that don't belong to a PUA.
+These are dropped here.
+
+```{r}
+puas <- puas %>% 
+  drop_na(PUA)
+```
+
+
 Following procedure used in the RSA's [UK Urban Futures Commission report](https://www.thersa.org/design-for-life-our-mission/hubs/uk-urban-futures-commission), relative deprivation for each PUA is determined by the percentage of LSOAs that are in the most deprived deciles.
 
 ```{r}
@@ -255,7 +276,7 @@ pua_imd <- puas %>%
   group_by(country_name, PUA) %>% 
   mutate(percentage = (n/sum(n)) * 100) %>% 
   ungroup() %>%
-  filter(index_of_multiple_deprivation_decile_country_specific %in% 1:3) %>% 
+  filter(index_of_multiple_deprivation_decile_country_specific %in% 1:2) %>% 
   drop_na(PUA)
 ```
 
@@ -268,7 +289,8 @@ England:
 
 pua_imd %>% 
   filter(country_name == "England") %>% 
-  arrange(index_of_multiple_deprivation_decile_country_specific, desc(percentage))
+  arrange(index_of_multiple_deprivation_decile_country_specific, desc(percentage)) %>% 
+  select(-n)
 ```
 
 Scotland: 
@@ -277,7 +299,9 @@ Scotland:
 #| echo: true
 
 pua_imd %>% 
-  filter(country_name == "Scotland")
+  filter(country_name == "Scotland") %>% 
+  arrange(index_of_multiple_deprivation_decile_country_specific, desc(percentage)) %>% 
+  select(-n)
 ```
 
 Wales:
@@ -286,8 +310,80 @@ Wales:
 #| echo: true
 
 pua_imd %>% 
-  filter(country_name == "Wales")
+  filter(country_name == "Wales") %>% 
+  arrange(index_of_multiple_deprivation_decile_country_specific, desc(percentage)) %>% 
+  select(-n)
 ```
+The first thing to note is that Scotland and Wales have a much smaller number of PUAs.
+There are four in Scotland (Aberdeen, Dundee, Edinburgh and Glasgow) and three in Wales (Cardiff, Newport and Swansea).
+
+##### Summary
+
+In Scotland, **Dundee** faces by far the highest levels of deprivation, compared to Glasgow, Edinburgh and Aberdeen, and would be the best target in Scotland, if we were to pick only one.
+
+In Wales, the three PUAs are not as dissimilar in terms of deprivation as they were in Scotland.
+That being said, **Newport** is experiencing the highest levels of deprivation, with Cardiff and Swansea following.
+
+The vast majority of PUAs is located in England. In order of deprivation, again looking at the top two deciles,:
+
+1. **Liverpool**
+2. **Blackburn**
+3. **Hull**
+4. Birmingham
+5. Bradford
+6. Burnley
+7. Peterborough
+
+#### Access to Nature
+
+Let's now focus on what access people have to green spaces.
+It should be noted that parks and public gardens will be public, but playing fields may be private.
+
+```{r}
+#| echo: true
+
+names(puas)
+```
+Looking at the variables included in this dataset again, the variables `average_distance_to_nearest_park_public_garden_or_playing_field_m` and `average_size_of_nearest_park_public_garden_or_playing_field_m2` seem like the most promising for our purposes.
+
+```{r}
+#| echo: true
+#| warning: false
+
+puas %>% 
+  ggplot(aes(x = average_distance_to_nearest_park_public_garden_or_playing_field_m)) +
+  geom_histogram(binwidth = 20)
+
+puas %>% 
+  # converting to km2 to avoid the plot having scientific notation
+  mutate(avg_green_space_size_km2 = average_size_of_nearest_park_public_garden_or_playing_field_m2/(1000^2)) %>% 
+  ggplot(aes(x = avg_green_space_size_km2)) +
+  geom_histogram(binwidth = .5)
+
+```
+It looks like the vast majority of green spaces are at a distance of no more than 1400m.
+The following plot shows the distribution of distances to nearest green spaces for each PUA.
+To make it easier to parse the plot, distances over 1500m have been excluded.
+
+```{r}
+puas %>% 
+  filter(average_distance_to_nearest_park_public_garden_or_playing_field_m < 1500) %>% 
+  ggplot(aes(x = average_distance_to_nearest_park_public_garden_or_playing_field_m)) +
+  geom_histogram(binwidth = 10) +
+  facet_wrap(~PUA)
+```
+
+
+```{r}
+puas %>% 
+  group_by(PUA) %>% 
+  summarise(median_distance_to_gs = median(average_distance_to_nearest_park_public_garden_or_playing_field_m),
+            median_size_gs = median(average_size_of_nearest_park_public_garden_or_playing_field_m2),
+            mean_distance_to_gs = mean(average_distance_to_nearest_park_public_garden_or_playing_field_m),
+            mean_size_gs = mean(average_size_of_nearest_park_public_garden_or_playing_field_m2)) %>%
+  arrange(desc(median_distance_to_gs))
+```
+
 
 ### Cross-checking with harmonised IMD data
 
