@@ -86,8 +86,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#place-selection" id="toc-place-selection" class="nav-link" data-scroll-target="#place-selection">Place selection</a>
   <ul class="collapse">
   <li><a href="#index-of-multiple-deprivation-access-to-nature" id="toc-index-of-multiple-deprivation-access-to-nature" class="nav-link" data-scroll-target="#index-of-multiple-deprivation-access-to-nature">Index of Multiple Deprivation &amp; Access to Nature</a></li>
+  <li><a href="#cross-checking-with-childrens-imd-england" id="toc-cross-checking-with-childrens-imd-england" class="nav-link" data-scroll-target="#cross-checking-with-childrens-imd-england">Cross-checking with Children’s IMD (England)</a></li>
   <li><a href="#cross-checking-with-harmonised-imd-data" id="toc-cross-checking-with-harmonised-imd-data" class="nav-link" data-scroll-target="#cross-checking-with-harmonised-imd-data">Cross-checking with harmonised IMD data</a></li>
-  <li><a href="#cross-checking-with-childerns-imd-england" id="toc-cross-checking-with-childerns-imd-england" class="nav-link" data-scroll-target="#cross-checking-with-childerns-imd-england">Cross-checking with Childern’s IMD (England)</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -133,7 +133,7 @@ To-do:
 -->
 <section id="the-brief" class="level2">
 <h2 class="anchored" data-anchor-id="the-brief">The brief</h2>
-<p>Identification of <strong>5-10 cities</strong> of interest across at least 2 countries in the UK. We suggest using the <strong>Indices of Multiple Deprivation</strong> (specific for children if possible) and utilising any other data we already have to inform this (perhaps data from urban futures?). A PGP partner mentioned <strong>‘Access to nature’</strong> data which may be useful if it’s already in an easily usable format – I’ve asked Eirini to look at it as a secondary focus and any other nature connection indices</p>
+<p>Identification of <strong>5-10 cities</strong> of interest across at least 2 countries in the UK.</p>
 </section>
 <section id="what-is-a-city" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-a-city">What is a city?</h2>
@@ -147,8 +147,6 @@ To-do:
 <h2 class="anchored" data-anchor-id="place-selection">Place selection</h2>
 <section id="index-of-multiple-deprivation-access-to-nature" class="level3">
 <h3 class="anchored" data-anchor-id="index-of-multiple-deprivation-access-to-nature">Index of Multiple Deprivation &amp; Access to Nature</h3>
-<section id="index-of-multiple-deprivation" class="level4">
-<h4 class="anchored" data-anchor-id="index-of-multiple-deprivation">Index of Multiple Deprivation</h4>
 <p>The data presented below comes from the ONS and relates to <a href="https://www.ons.gov.uk/economy/environmentalaccounts/datasets/accesstogardensandpublicgreenspaceingreatbritain">Access to gardens and public green space in Great Britain</a>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
@@ -169,6 +167,8 @@ To-do:
  [9] "LSOA Parks and Playing Fields"   "GB Access by Ethnicity"         </code></pre>
 </div>
 </div>
+<section id="index-of-multiple-deprivation" class="level4">
+<h4 class="anchored" data-anchor-id="index-of-multiple-deprivation">Index of Multiple Deprivation</h4>
 <p>To answer the question we’re interested in (“Which are the most deprived cities in the UK?”) we need to:</p>
 <ol type="1">
 <li>combine Local Authority Districts (LADs) into Primary Urban Areas (PUAs)</li>
@@ -572,13 +572,20 @@ To-do:
 # ℹ 52 more rows</code></pre>
 </div>
 </div>
+<section id="summary-1" class="level5">
+<h5 class="anchored" data-anchor-id="summary-1">Summary</h5>
+<p>Of the candidate places from the deprivation data, Hull is the only one that scores pretty high in distance to green spaces. Birmingham and Blackburn are in second and third place, though quite far behind Hull. The rest of the places in England are actually pretty close to green spaces. All in all, however, even in the places with the largest distances from green space, the median distances are pretty small and less than 500m in all cases.</p>
+<p>Regarding the other GB countries, Newport is the Welsh PUA with the largest distances from green spaces and Aberdeen the Scottish one. Note, however, that Aberdeen had the lowest levels of deprivation in the Scottish PUAs.</p>
+<p>There is a longer discussion to be had here about which the most appropriate metric is when thinking about access to nature, especially in the context of PGP. Critically, because PGP will not create <em>new</em> green spaces, we perhaps should be looking at the places with the <em>best</em> access to green spaces. This could be beneficial for the success of the project, as PGPs will have to be created in existing areas; the easier to access these are the better.</p>
+<p>Additionally, this dataset has many limitations, one of which being that the play areas included in the dataset could be private.</p>
 </section>
+</section>
+</section>
+<section id="cross-checking-with-childrens-imd-england" class="level3">
+<h3 class="anchored" data-anchor-id="cross-checking-with-childrens-imd-england">Cross-checking with Children’s IMD (England)</h3>
 </section>
 <section id="cross-checking-with-harmonised-imd-data" class="level3">
 <h3 class="anchored" data-anchor-id="cross-checking-with-harmonised-imd-data">Cross-checking with harmonised IMD data</h3>
-</section>
-<section id="cross-checking-with-childerns-imd-england" class="level3">
-<h3 class="anchored" data-anchor-id="cross-checking-with-childerns-imd-england">Cross-checking with Childern’s IMD (England)</h3>
 </section>
 </section>
 

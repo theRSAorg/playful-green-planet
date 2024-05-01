@@ -17,8 +17,6 @@ To-do:
 
 ## The brief
 Identification of **5-10 cities** of interest across at least 2 countries in the UK.
-We suggest using the **Indices of Multiple Deprivation** (specific for children if possible) and utilising any other data we already have to inform this (perhaps data from urban futures?).
-A PGP partner mentioned **‘Access to nature’** data which may be useful if it’s already in an easily usable format – I’ve asked Eirini to look at it as a secondary focus and any other nature connection indices
 
 ## What is a city?
 A practical answer to this complicated question comes from the [Centre for Cities](https://www.centreforcities.org): they have selected the UK's 63 largest cities and towns, which they have defined as Primary Output Areas (PUAs).
@@ -38,7 +36,6 @@ Additionally, rural places can suffer from high levels of deprivation.
 
 ### Index of Multiple Deprivation & Access to Nature
 
-#### Index of Multiple Deprivation
 The data presented below comes from the ONS and relates to [Access to gardens and public green space in Great Britain](https://www.ons.gov.uk/economy/environmentalaccounts/datasets/accesstogardensandpublicgreenspaceingreatbritain).
 
 
@@ -62,6 +59,8 @@ This file contains the following sheets:
 
 excel_sheets(here("data-raw", "ospublicgreenspacereferencetables.xlsx"))
 ```
+#### Index of Multiple Deprivation
+
 To answer the question we're interested in ("Which are the most deprived cities in the UK?") we need to:
 
 1. combine Local Authority Districts (LADs) into Primary Urban Areas (PUAs)
@@ -384,12 +383,26 @@ puas %>%
   arrange(desc(median_distance_to_gs))
 ```
 
+##### Summary
+
+Of the candidate places from the deprivation data, Hull is the only one that scores pretty high in distance to green spaces.
+Birmingham and Blackburn are in second and third place, though quite far behind Hull.
+The rest of the places in England are actually pretty close to green spaces.
+All in all, however, even in the places with the largest distances from green space, the median distances are pretty small and less than 500m in all cases.
+
+Regarding the other GB countries, Newport is the Welsh PUA with the largest distances from green spaces and Aberdeen the Scottish one.
+Note, however, that Aberdeen had the lowest levels of deprivation in the Scottish PUAs.
+
+There is a longer discussion to be had here about which the most appropriate metric is when thinking about access to nature, especially in the context of PGP.
+Critically, because PGP will not create *new* green spaces, we perhaps should be looking at the places with the *best* access to green spaces.
+This could be beneficial for the success of the project, as PGPs will have to be created in existing areas; the easier to access these are the better.
+
+Additionally, this dataset has many limitations, one of which being that the play areas included in the dataset could be private.
+
+
+### Cross-checking with Children's IMD (England)
+
+
 
 ### Cross-checking with harmonised IMD data
-
-
-### Cross-checking with Childern's IMD (England)
-
-
-
 
