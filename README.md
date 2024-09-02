@@ -8,3 +8,5 @@ The data included in this repository come from the Office for National Statistic
 They are shared here for convenience only.
 Anyone interested in reusing these datasets should download them from the websites shared above and cite them accordingly.
 Both datasets are shared under an [Open Government Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
+
+The code in this repository is made publibly available under the [MIT Licence](LICENSE).
