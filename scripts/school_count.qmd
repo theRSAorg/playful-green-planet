@@ -1,0 +1,416 @@
+---
+title: "Pupil counts in England and areas of interest"
+format: 
+  html:
+    embed-resources: true
+    toc: true
+    # code-fold: true
+editor: visual
+execute:
+  warning: false
+  echo: false
+---
+
+# Overview
+
+Brief:
+
+-   Task 1: Estimated number of 14-18 year old learners in state secondary schools in the 10 priority areas identified by Eirini for PGP - see GitHub - <https://theRSAorg/playful-green-planet>
+-   Task 2: Estimated number of 14-18 year old learners in state secondary schools in the UK
+
+I have taken two approaches. The first uses data from ['Get info about schools'](https://get-information-schools.service.gov.uk/). The way this data is provided means that we can only look at 11-18 year-olds with this method. The data selection facility allows us to select academies and free schools in addition to state-funded schools, which gives us some clarity on the establishment type. The results of this approach are [**here**](#result).
+
+The second approach uses a [different dataset](https://explore-education-statistics.service.gov.uk/find-statistics/school-pupils-and-their-characteristics). This data breaks counts down by age, which makes it possible to look specifically at the 14-18 year old range. However, it is less clear what types of school are included (specifically, it is not clear whether independent schools in this data are state-funded, private, or both - based on higher counts using this method, my guess is both). I used this dataset to crosscheck the 11-18 results from the first approach, and found that the counts using this approach are higher. [**Results for 11-18 year-olds here**](#sec-11-18-year-olds). I then conducted the same analysis for 14-18 year olds. [**Results for 14-18 year-olds here**](#sec-14-18-year-olds)**.**
+
+```{r}
+options(scipen=999)
+```
+
+```{r}
+library(here)
+library(tidyr)
+library(readr)
+library(janitor)
+library(dplyr)
+library(DBI)
+library(stringr)
+library(kableExtra)
+```
+
+# Data
+
+Data taken from ['Get info about schools'](https://get-information-schools.service.gov.uk/). On the download page, I chose
+
+1.  Establishment fields (edubasealldata) - contains pupil counts. But institutions' status as state/academy is not immediately clear from the variables in this data
+2.  All academies and free school fields (edubaseallstatefunded) - state schools. Doesn't have pupil counts
+3.  State-funded school fields (edubaseallacademiesandfre) - academies and free schools. Doesn't have pupil counts
+
+Each school has a URN. The plan is to use the schools and their URNs from data files 2 and 3 and merge them with file 1 by URN. This way we're getting pupil counts (file 1) for the school types of interest (files 2 and 3)
+
+```{r}
+all_data <- read_csv(here('data-raw','edubasealldata20241111.csv')) %>%
+  clean_names()
+state <- read_csv(here('data-raw','edubaseallstatefunded20241111.csv')) %>%
+  clean_names()
+academy <- read_csv(here('data-raw','edubaseallacademiesandfree20241111.csv'))%>%
+  clean_names()
+
+# for state and academy just get the names and URNs
+state_schools <- state %>%
+  select(urn, establishment_name, type_of_establishment_name, la_code, la_name)
+
+academy_schools <- academy %>%
+  select(urn, establishment_name, type_of_establishment_name, la_code, la_name)
+
+all_schools <- full_join(state_schools, academy_schools, by='urn')
+
+# now join to all_data
+# I'm doing this the wrong way deliberately to check that the names of institutions are the same (i.e, to check urns are correct) 
+all_data2 <- all_data %>%
+  select(urn, la_code, la_name, establishment_name, type_of_establishment_name, establishment_type_group_name, statutory_low_age, statutory_high_age, number_of_pupils)
+
+all_schools2 <- all_schools[1:5] %>%
+  left_join(all_data2, by = 'urn')
+
+all_schools3 <- all_schools2 %>%
+  select(urn, la_code, la_name, establishment_name, type_of_establishment_name, establishment_type_group_name, statutory_low_age, statutory_high_age, number_of_pupils)
+```
+
+After joining the data it seems that file 2 includes all academies and free schools anyway
+
+Steps:
+
+1.  From files 2 and 3 get school names and URNs
+2.  Merge these with file 1, keeping only the areas in files 2 and 3 (i.e., left_join(files2/3, file1))
+3.  Filter to age of interest.
+4.  Filter to local authorities of interest, i.e., the local authorities within the PUAs of interest.
+
+```{r}
+ages <- seq(11,18,1)
+
+subset1 <- all_schools3 %>%
+  filter(statutory_low_age %in% ages & statutory_high_age %in% ages) 
+```
+
+```{r}
+# connect to database
+con <- DBI::dbConnect(
+    RPostgres::Postgres(),
+    host = "treehouse-aws-cluster.cpir1hljvmtq.eu-west-2.rds.amazonaws.com", port = 5432, dbname = "treehouse_ons",
+    #user = keyring::key_list("rsa-database")[1,2], password = keyring::key_get("rsa-database", "eirini_z0")
+    user = keyring::key_list("rsa-database")[1,2], password = keyring::key_get("rsa-database", "jolyon_mw")
+)
+
+pua_lookup <- dbReadTable(con, "pua_lookup_long")
+
+dbDisconnect(con)
+
+puas_of_interest <- c(
+  'Hull',
+  'Liverpool',
+  'Birmingham',
+  'Blackburn',
+  'Bradford',
+  'Dundee',
+  'Glasgow',
+  'Newport',
+  'Cardiff',
+  'Belfast'
+)
+
+lads_of_interest <- pua_lookup %>%
+  filter(pua %in% puas_of_interest) %>%
+  pull(lad21nm)
+```
+
+```{r}
+#| output: false 
+subset2 <- subset1 %>%
+  filter(la_name %in% lads_of_interest)
+
+# check we got em all - 9 missing
+length(lads_of_interest)
+in_data <- unique(subset2$la_name)
+
+# missing areas are all non-england. ok for now
+lads_of_interest[which(!(lads_of_interest %in% in_data))]
+```
+
+```{r}
+# add pua back in so we can produce stats by pua
+subset2 <- subset2 %>%
+  left_join(pua_lookup %>% select(pua, lad21nm), by = c("la_name"="lad21nm"))
+  
+```
+
+```{r}
+pua_summary <- subset2 %>%
+  group_by(pua) %>%
+  summarise(
+    total_pupils = sum(number_of_pupils, na.rm=T)
+  )
+
+lad_summary <- subset2 %>%
+  group_by(la_name) %>%
+  summarise(
+    total_pupils = sum(number_of_pupils, na.rm=T)
+  )
+
+total_pupils_areas <- subset2 %>%
+  summarise(
+    total_pupils = sum(number_of_pupils, na.rm=T)
+  ) %>%
+  pull()
+
+total_pupils_uk <- subset1 %>%
+  summarise(
+    total_pupils = sum(number_of_pupils, na.rm=T)
+  ) %>%
+  pull()
+```
+
+# Result {#result}
+
+**The total number of pupils in the England is `r total_pupils_uk`**.
+
+For reference, the table below shows how this number breaks down by type of establishment.
+
+```{r}
+subset1 %>%
+  group_by(establishment_type_group_name) %>%
+  summarise(
+    total_pupils = sum(number_of_pupils, na.rm=T)
+  ) %>%
+  arrange(desc(total_pupils)) %>%
+  kable(col.names = c("Establishment type","Count")) %>%
+  kable_styling(full_width = F)
+```
+
+**The total number of pupils across the candidate areas is `r total_pupils_areas`**.
+
+The table below breaks this number down by primary urban area (PUA)
+
+```{r}
+pua_summary %>%
+  arrange(desc(total_pupils)) %>%
+  kable(col.names=c("PUA", "Total pupils")) %>%
+  kable_styling(full_width=F)
+```
+
+The table below breaks this number down by local authority district (LAD)
+
+```{r}
+lad_summary %>%
+  arrange(desc(total_pupils)) %>%
+  kable(col.names=c("LAD", "Total pupils")) %>%
+  kable_styling(full_width=F)
+```
+
+# Alternative approach
+
+Here is an alternative approach using a [different dataset](https://explore-education-statistics.service.gov.uk/find-statistics/school-pupils-and-their-characteristics)
+
+```{r}
+url <- "https://content.explore-education-statistics.service.gov.uk/api/releases/60f096b8-6ed9-4e9e-97ee-2ca83867d51e/files"
+
+filename <- basename(url) # this takes the filename from the url
+filepath <- here::here("data-raw", paste0(filename,'.zip'))
+
+# check if the file exists. if it doesn't, download
+if(!file.exists(filepath)){ 
+  cat("Downloading data\n")
+  download.file(url, destfile = filepath, mode = "wb")
+} else{
+  cat("Data already in directory. Loading it.\n")
+}
+
+
+unzip_dir <- here::here("data-raw", filename) 
+
+if (!dir.exists(unzip_dir)) {
+  print("yes")
+  cat("Unzipping the file\n")
+  unzip(filepath, exdir = unzip_dir)
+} else {
+  cat("Data already unzipped.\n")
+}
+
+
+# read the data
+data <- read_csv(paste0(unzip_dir,'/data','/spc_pupils_age_and_sex_.csv')) %>%
+  filter(time_period=='202324') %>%
+  filter(geographic_level=='Local authority') %>% 
+  filter(sex == 'Total') %>%
+  select(la_name, new_la_code, phase_type_grouping, age, headcount)
+```
+
+## 11-18 year-olds {#sec-11-18-year-olds}
+
+First let's check how this count compares to previous one for 11-18 year olds
+
+```{r}
+data2 <- data %>%
+  filter(age %in% ages)
+
+total_pupils_uk <- data2 %>%
+  filter(phase_type_grouping=="Total") %>%
+  summarise(
+    sum = sum(headcount)
+  ) %>%
+  pull()
+```
+
+This data gives a different number to what we found before. Here we count **`r total_pupils_uk` 11-18 year olds in the whole country.**
+
+This data is England only, consistent with the previous data.
+
+One possible explanation is to do with establishment types. For reference, h the table below shows the 11-18 count by establishment type. It doesn't really help us understand the difference with certainty, but we could speculate that this second data set includes all independent schools, including private schools.
+
+The [data guidance](https://explore-education-statistics.service.gov.uk/find-statistics/school-pupils-and-their-characteristics/data-guidance) states:
+
+*This release provides information on the number of schools and pupils in:*
+
+-   *state-funded primary schools*
+-   *state-funded secondary schools*
+-   *state-funded special schools*
+-   *non-maintained special schools*
+-   *pupil referral units*
+-   *independent schools*
+-   *local authority alternative provision*
+
+The omission of 'state-funded' with respect to independent schools might suggest that it includes all schools, including both state-funded and private independent schools.
+
+```{r}
+data2 %>% 
+  group_by(phase_type_grouping) %>%
+  summarise(
+    sum = sum(headcount)
+  )  %>%
+  #arrange(desc(sum)) %>%
+  kable(col.names = c("Establishment type","Count")) %>%
+  kable_styling(full_width = F)
+```
+
+Proceeding nonetheless, below is the breakdown of 11-18 year-olds for the areas of interest
+
+```{r}
+data3 <- data2 %>%
+  left_join(pua_lookup %>% select(pua, lad21nm), by = c("la_name"="lad21nm")) %>%
+  filter(la_name %in% lads_of_interest) %>%
+  filter(phase_type_grouping=="Total") # just get the total counts
+
+pua_summary <- data3 %>%
+  group_by(pua) %>%
+  summarise(
+    total_pupils = sum(headcount, na.rm=T)
+  )
+
+lad_summary <- data3 %>%
+  group_by(la_name) %>%
+  summarise(
+    total_pupils = sum(headcount, na.rm=T)
+  )
+
+total_pupils_areas <- data3 %>%
+  summarise(
+    total_pupils = sum(headcount, na.rm=T)
+  ) %>%
+  pull()
+```
+
+**The total number of 11-18 year-old pupils across the candidate areas is `r total_pupils_areas`**.
+
+The table below breaks this number down by primary urban area (PUA)
+
+```{r}
+pua_summary %>%
+  arrange(desc(total_pupils)) %>%
+  kable(col.names=c("PUA", "Total pupils")) %>%
+  kable_styling(full_width=F)
+```
+
+The table below breaks this number down by local authority district (LAD)
+
+```{r}
+lad_summary %>%
+  arrange(desc(total_pupils)) %>%
+  kable(col.names=c("LAD", "Total pupils")) %>%
+  kable_styling(full_width=F)
+```
+
+## 14-18 year-olds {#sec-14-18-year-olds}
+
+```{r}
+ages2 <- seq(14,18,1)
+
+data2 <- data %>%
+  filter(age %in% ages2)
+
+total_pupils_uk <- data2 %>%
+  filter(phase_type_grouping=="Total") %>%
+  summarise(
+    sum = sum(headcount)
+  ) %>%
+  pull()
+```
+
+**The total number of 14-18 year-old pupils in the UK is `r total_pupils_uk`**.
+
+The below table shows this number broken down by establishment type
+
+```{r}
+data2 %>% 
+  group_by(phase_type_grouping) %>%
+  summarise(
+    sum = sum(headcount)
+  )  %>%
+  #arrange(desc(sum)) %>%
+  kable(col.names = c("Establishment type","Count")) %>%
+  kable_styling(full_width = F)
+```
+
+```{r}
+# get puas and filter ot just lads of interest
+data3 <- data2 %>%
+  left_join(pua_lookup %>% select(pua, lad21nm), by = c("la_name"="lad21nm")) %>%
+  filter(la_name %in% lads_of_interest) %>%
+  filter(phase_type_grouping=="Total")
+
+pua_summary <- data3 %>%
+  group_by(pua) %>%
+  summarise(
+    total_pupils = sum(headcount, na.rm=T)
+  )
+
+lad_summary <- data3 %>%
+  group_by(la_name) %>%
+  summarise(
+    total_pupils = sum(headcount, na.rm=T)
+  )
+
+total_pupils_areas <- data3 %>%
+  summarise(
+    total_pupils = sum(headcount, na.rm=T)
+  ) %>%
+  pull()
+```
+
+**The total number of 14-18 year-old pupils across the candidate areas is `r total_pupils_areas`**.
+
+The table below breaks this number down by primary urban area (PUA)
+
+```{r}
+pua_summary %>%
+  arrange(desc(total_pupils)) %>%
+  kable(col.names=c("PUA", "Total pupils")) %>%
+  kable_styling(full_width=F)
+```
+
+The table below breaks this number down by local authority district (LAD)
+
+```{r}
+lad_summary %>%
+  arrange(desc(total_pupils)) %>%
+  kable(col.names=c("LAD", "Total pupils")) %>%
+  kable_styling(full_width=F)
+```
