@@ -3278,7 +3278,14 @@ border: 0;
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
   <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
-  <li><a href="#result" id="toc-result" class="nav-link" data-scroll-target="#result">Result</a></li>
+  <li><a href="#result" id="toc-result" class="nav-link" data-scroll-target="#result">Result</a>
+  <ul class="collapse">
+  <li><a href="#additional-information" id="toc-additional-information" class="nav-link" data-scroll-target="#additional-information">Additional information</a>
+  <ul class="collapse">
+  <li><a href="#by-establishment-group" id="toc-by-establishment-group" class="nav-link" data-scroll-target="#by-establishment-group">By establishment group</a></li>
+  <li><a href="#by-establishment-type" id="toc-by-establishment-type" class="nav-link" data-scroll-target="#by-establishment-type">By establishment type</a></li>
+  </ul></li>
+  </ul></li>
   <li><a href="#alternative-approach" id="toc-alternative-approach" class="nav-link" data-scroll-target="#alternative-approach">Alternative approach</a>
   <ul class="collapse">
   <li><a href="#sec-11-18-year-olds" id="toc-sec-11-18-year-olds" class="nav-link" data-scroll-target="#sec-11-18-year-olds">11-18 year-olds</a></li>
@@ -3312,7 +3319,7 @@ border: 0;
 <h1>Overview</h1>
 <p>Brief:</p>
 <ul>
-<li>Task 1: Estimated number of 14-18 year old learners in state secondary schools in the 10 priority areas identified by Eirini for PGP - see GitHub - <a href="https://theRSAorg/playful-green-planet" class="uri">https://theRSAorg/playful-green-planet</a></li>
+<li>Task 1: Estimated number of 14-18 year old learners in state secondary schools in the 10 priority areas identified by Eirini for PGP - see GitHub - <a href="https://github.com/theRSAorg/playful-green-planet" class="uri">https://github.com/theRSAorg/playful-green-planet</a></li>
 <li>Task 2: Estimated number of 14-18 year old learners in state secondary schools in the UK</li>
 </ul>
 <p>I have taken two approaches. The first uses data from <a href="https://get-information-schools.service.gov.uk/">‘Get info about schools’</a>. The way this data is provided means that we can only look at 11-18 year-olds with this method. The data selection facility allows us to select academies and free schools in addition to state-funded schools, which gives us some clarity on the establishment type. The results of this approach are <a href="#result"><strong>here</strong></a>.</p>
@@ -3471,6 +3478,646 @@ border: 0;
 
 </div>
 </div>
+<section id="additional-information" class="level2">
+<h2 class="anchored" data-anchor-id="additional-information">Additional information</h2>
+<p>Bringing the above together into desired format.</p>
+<section id="by-establishment-group" class="level3">
+<h3 class="anchored" data-anchor-id="by-establishment-group">By establishment group</h3>
+<section id="data-by-primary-urban-area-and-establishment-group" class="level4">
+<h4 class="anchored" data-anchor-id="data-by-primary-urban-area-and-establishment-group">Data by Primary Urban Area and establishment group</h4>
+<p>csv file can be found <a href="https://github.com/theRSAorg/playful-green-planet/tree/main/data-processed/pua_establishment_group.csv">here</a></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">PUA</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">11-18 year-old pupils</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Number of schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Number of academies</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Number of free schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Number of local authority maintained schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Number of special schools</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Birmingham</td>
+<td style="text-align: right;">162741</td>
+<td style="text-align: right;">169</td>
+<td style="text-align: right;">120</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Blackburn</td>
+<td style="text-align: right;">9581</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bradford</td>
+<td style="text-align: right;">33466</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hull</td>
+<td style="text-align: right;">16388</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Liverpool</td>
+<td style="text-align: right;">32415</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Total</td>
+<td style="text-align: right;">254591</td>
+<td style="text-align: right;">260</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">44</td>
+<td style="text-align: right;">4</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+<section id="data-by-local-authority-district-and-establishment-group-with-pua-membership-for-context" class="level4">
+<h4 class="anchored" data-anchor-id="data-by-local-authority-district-and-establishment-group-with-pua-membership-for-context">Data by Local Authority District and establishment group (with PUA membership for context)</h4>
+<p>csv file can be found <a href="https://github.com/theRSAorg/playful-green-planet/tree/main/data-processed/lad_establishment_group.csv">here</a></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">PUA</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">LAD</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">11-18 year-old pupils</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Number of schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Number of academies</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Number of free schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Number of local authority maintained schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Number of special schools</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Birmingham</td>
+<td style="text-align: left;">Birmingham</td>
+<td style="text-align: right;">70258</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: right;">52</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Birmingham</td>
+<td style="text-align: left;">Dudley</td>
+<td style="text-align: right;">19032</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Birmingham</td>
+<td style="text-align: left;">Sandwell</td>
+<td style="text-align: right;">19693</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Birmingham</td>
+<td style="text-align: left;">Solihull</td>
+<td style="text-align: right;">17660</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Birmingham</td>
+<td style="text-align: left;">Walsall</td>
+<td style="text-align: right;">20417</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Birmingham</td>
+<td style="text-align: left;">Wolverhampton</td>
+<td style="text-align: right;">15681</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Blackburn</td>
+<td style="text-align: left;">Blackburn with Darwen</td>
+<td style="text-align: right;">9581</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bradford</td>
+<td style="text-align: left;">Bradford</td>
+<td style="text-align: right;">33466</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hull</td>
+<td style="text-align: left;">Kingston upon Hull, City of</td>
+<td style="text-align: right;">16388</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Liverpool</td>
+<td style="text-align: left;">Knowsley</td>
+<td style="text-align: right;">5980</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Liverpool</td>
+<td style="text-align: left;">Liverpool</td>
+<td style="text-align: right;">26435</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total</td>
+<td style="text-align: right;">254591</td>
+<td style="text-align: right;">260</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">44</td>
+<td style="text-align: right;">4</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+</section>
+<section id="by-establishment-type" class="level3">
+<h3 class="anchored" data-anchor-id="by-establishment-type">By establishment type</h3>
+<section id="data-by-primary-urban-area-and-establishment-type" class="level4">
+<h4 class="anchored" data-anchor-id="data-by-primary-urban-area-and-establishment-type">Data by Primary Urban Area and establishment type</h4>
+<p>csv file can be found <a href="https://github.com/theRSAorg/playful-green-planet/tree/main/data-processed/pua_establishment_type.csv">here</a></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">PUA</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">11-18 year-old pupils</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Number of schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Academy alternative provision sponsor led</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Academy converters</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Academy sponsor led</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Community schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Community special schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Foundation schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Foundation special schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Free schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Free schools alternative provision</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Free schools special</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Pupil referral units</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Voluntary aided schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Academy alternative provision converters</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Birmingham</td>
+<td style="text-align: right;">162741</td>
+<td style="text-align: right;">169</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: right;">44</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Blackburn</td>
+<td style="text-align: right;">9581</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bradford</td>
+<td style="text-align: right;">33466</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hull</td>
+<td style="text-align: right;">16388</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Liverpool</td>
+<td style="text-align: right;">32415</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Total</td>
+<td style="text-align: right;">254591</td>
+<td style="text-align: right;">260</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">101</td>
+<td style="text-align: right;">78</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">3</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+<section id="data-by-local-authority-district-and-establishment-group-with-pua-membership-for-context-1" class="level4">
+<h4 class="anchored" data-anchor-id="data-by-local-authority-district-and-establishment-group-with-pua-membership-for-context-1">Data by Local Authority District and establishment group (with PUA membership for context)</h4>
+<p>csv file can be found <a href="https://github.com/theRSAorg/playful-green-planet/tree/main/data-processed/lad_establishment_type.csv">here</a></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">PUA</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">LAD</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">11-18 year-old pupils</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Number of schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Academy alternative provision sponsor led</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Academy converters</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Academy sponsor led</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Community schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Community special schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Foundation schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Foundation special schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Free schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Free schools alternative provision</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Free schools special</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Pupil referral units</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Voluntary aided schools</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Academy alternative provision converters</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Birmingham</td>
+<td style="text-align: left;">Birmingham</td>
+<td style="text-align: right;">70258</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: right;">34</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Birmingham</td>
+<td style="text-align: left;">Dudley</td>
+<td style="text-align: right;">19032</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Birmingham</td>
+<td style="text-align: left;">Sandwell</td>
+<td style="text-align: right;">19693</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Birmingham</td>
+<td style="text-align: left;">Solihull</td>
+<td style="text-align: right;">17660</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Birmingham</td>
+<td style="text-align: left;">Walsall</td>
+<td style="text-align: right;">20417</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Birmingham</td>
+<td style="text-align: left;">Wolverhampton</td>
+<td style="text-align: right;">15681</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Blackburn</td>
+<td style="text-align: left;">Blackburn with Darwen</td>
+<td style="text-align: right;">9581</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bradford</td>
+<td style="text-align: left;">Bradford</td>
+<td style="text-align: right;">33466</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hull</td>
+<td style="text-align: left;">Kingston upon Hull, City of</td>
+<td style="text-align: right;">16388</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Liverpool</td>
+<td style="text-align: left;">Knowsley</td>
+<td style="text-align: right;">5980</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Liverpool</td>
+<td style="text-align: left;">Liverpool</td>
+<td style="text-align: right;">26435</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total</td>
+<td style="text-align: right;">254591</td>
+<td style="text-align: right;">260</td>
+<td style="text-align: right;">101</td>
+<td style="text-align: right;">78</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+</section>
+</section>
 </section>
 <section id="alternative-approach" class="level1">
 <h1>Alternative approach</h1>

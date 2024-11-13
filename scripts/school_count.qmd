@@ -15,7 +15,7 @@ execute:
 
 Brief:
 
--   Task 1: Estimated number of 14-18 year old learners in state secondary schools in the 10 priority areas identified by Eirini for PGP - see GitHub - <https://theRSAorg/playful-green-planet>
+-   Task 1: Estimated number of 14-18 year old learners in state secondary schools in the 10 priority areas identified by Eirini for PGP - see GitHub - <https://github.com/theRSAorg/playful-green-planet>
 -   Task 2: Estimated number of 14-18 year old learners in state secondary schools in the UK
 
 I have taken two approaches. The first uses data from ['Get info about schools'](https://get-information-schools.service.gov.uk/). The way this data is provided means that we can only look at 11-18 year-olds with this method. The data selection facility allows us to select academies and free schools in addition to state-funded schools, which gives us some clarity on the establishment type. The results of this approach are [**here**](#result).
@@ -23,6 +23,7 @@ I have taken two approaches. The first uses data from ['Get info about schools']
 The second approach uses a [different dataset](https://explore-education-statistics.service.gov.uk/find-statistics/school-pupils-and-their-characteristics). This data breaks counts down by age, which makes it possible to look specifically at the 14-18 year old range. However, it is less clear what types of school are included (specifically, it is not clear whether independent schools in this data are state-funded, private, or both - based on higher counts using this method, my guess is both). I used this dataset to crosscheck the 11-18 results from the first approach, and found that the counts using this approach are higher. [**Results for 11-18 year-olds here**](#sec-11-18-year-olds). I then conducted the same analysis for 14-18 year olds. [**Results for 14-18 year-olds here**](#sec-14-18-year-olds)**.**
 
 ```{r}
+rm(list=ls())
 options(scipen=999)
 ```
 
@@ -143,6 +144,8 @@ subset2 <- subset2 %>%
   
 ```
 
+# Result {#result}
+
 ```{r}
 pua_summary <- subset2 %>%
   group_by(pua) %>%
@@ -169,7 +172,6 @@ total_pupils_uk <- subset1 %>%
   pull()
 ```
 
-# Result {#result}
 
 **The total number of pupils in the England is `r total_pupils_uk`**.
 
@@ -204,6 +206,215 @@ lad_summary %>%
   arrange(desc(total_pupils)) %>%
   kable(col.names=c("LAD", "Total pupils")) %>%
   kable_styling(full_width=F)
+```
+
+## Additional information
+
+Bringing the above together into desired format.
+
+### By establishment group
+
+#### Data by Primary Urban Area and establishment group
+
+csv file can be found [here](https://github.com/theRSAorg/playful-green-planet/tree/main/data-processed/pua_establishment_group.csv)
+
+```{r}
+pua_summary2 <- subset2 %>%
+  group_by(pua) %>%
+  summarise(
+    total_pupils = sum(number_of_pupils, na.rm=T),
+    number_of_schools = n(),
+  ) %>%
+  ungroup()
+
+pua_est_group <- subset2 %>%
+  group_by(pua, establishment_type_group_name) %>%
+  summarise(
+    n = n()
+  ) %>%
+  pivot_wider(names_from = establishment_type_group_name, values_from = n) %>%
+  clean_names() %>%
+  ungroup()
+
+pua_combined <- pua_summary2 %>%
+  left_join(pua_est_group, by="pua")
+
+
+total_row <- pua_combined %>%
+  summarise(across(where(is.numeric), ~ sum(.x, na.rm = TRUE))) %>%
+  mutate(pua = "Total")
+
+pua_combined_with_total <- bind_rows(pua_combined, total_row)
+
+column_names <- c("PUA", "11-18 year-old pupils","Number of schools","Number of academies", "Number of free schools","Number of local authority maintained schools","Number of special schools")
+
+pua_combined_with_total %>%
+  kable(col.names = column_names) %>%
+  kable_styling(full_width = F)
+
+write_csv(pua_combined_with_total, file=here('data-processed','pua_establishment_group.csv'))
+```
+
+
+#### Data by Local Authority District and establishment group (with PUA membership for context)
+
+csv file can be found [here](https://github.com/theRSAorg/playful-green-planet/tree/main/data-processed/lad_establishment_group.csv)
+
+```{r}
+lad_summary2 <- subset2 %>%
+  group_by(pua, la_name) %>%
+  summarise(
+    total_pupils = sum(number_of_pupils, na.rm=T),
+    number_of_schools = n(),
+  ) %>%
+  ungroup()
+
+lad_est_group <- subset2 %>%
+  group_by(pua,la_name, establishment_type_group_name) %>%
+  summarise(
+    n = n()
+  ) %>%
+  pivot_wider(names_from = establishment_type_group_name, values_from = n) %>%
+  clean_names() %>%
+  ungroup()
+
+lad_combined <- lad_summary2 %>%
+  left_join(lad_est_group, by=c("pua","la_name")) 
+
+
+total_row <- lad_combined %>%
+  summarise(across(where(is.numeric), ~ sum(.x, na.rm = TRUE))) %>%
+  mutate(la_name = "Total", pua = "")
+
+lad_combined_with_total <- bind_rows(lad_combined, total_row)
+
+column_names <- c("PUA","LAD", "11-18 year-old pupils","Number of schools","Number of academies", "Number of free schools","Number of local authority maintained schools","Number of special schools")
+
+lad_combined_with_total %>%
+  kable(col.names = column_names) %>%
+  kable_styling(full_width = F)
+
+write_csv(lad_combined_with_total, file=here('data-processed','lad_establishment_group.csv'))
+
+```
+
+### By establishment type
+
+#### Data by Primary Urban Area and establishment type
+
+csv file can be found [here](https://github.com/theRSAorg/playful-green-planet/tree/main/data-processed/pua_establishment_type.csv)
+
+```{r}
+pua_summary2 <- subset2 %>%
+  group_by(pua) %>%
+  summarise(
+    total_pupils = sum(number_of_pupils, na.rm=T),
+    number_of_schools = n(),
+  ) %>%
+  ungroup()
+
+pua_est_group <- subset2 %>%
+  group_by(pua, type_of_establishment_name) %>%
+  summarise(
+    n = n()
+  ) %>%
+  pivot_wider(names_from = type_of_establishment_name, values_from = n) %>%
+  clean_names() %>%
+  ungroup()
+
+pua_combined <- pua_summary2 %>%
+  left_join(pua_est_group, by="pua")
+
+
+total_row <- pua_combined %>%
+  summarise(across(where(is.numeric), ~ sum(.x, na.rm = TRUE))) %>%
+  mutate(pua = "Total")
+
+pua_combined_with_total <- bind_rows(pua_combined, total_row)
+
+column_names <- c(
+  "PUA", 
+  "11-18 year-old pupils",
+  "Number of schools",
+  "Academy alternative provision sponsor led",
+  "Academy converters",
+  "Academy sponsor led",
+  "Community schools",
+  "Community special schools",
+  "Foundation schools",
+  "Foundation special schools",
+  "Free schools",
+  "Free schools alternative provision",
+  "Free schools special",
+  "Pupil referral units",
+  "Voluntary aided schools",
+  "Academy alternative provision converters")
+
+pua_combined_with_total %>%
+  kable(col.names = column_names) %>%
+  kable_styling(full_width = F)
+
+write_csv(pua_combined_with_total, file=here('data-processed','pua_establishment_type.csv'))
+
+```
+
+
+#### Data by Local Authority District and establishment group (with PUA membership for context)
+
+csv file can be found [here](https://github.com/theRSAorg/playful-green-planet/tree/main/data-processed/lad_establishment_type.csv)
+
+```{r}
+lad_summary2 <- subset2 %>%
+  group_by(pua, la_name) %>%
+  summarise(
+    total_pupils = sum(number_of_pupils, na.rm=T),
+    number_of_schools = n(),
+  ) %>%
+  ungroup()
+
+lad_est_group <- subset2 %>%
+  group_by(pua,la_name, type_of_establishment_name) %>%
+  summarise(
+    n = n()
+  ) %>%
+  pivot_wider(names_from = type_of_establishment_name, values_from = n) %>%
+  clean_names() %>%
+  ungroup()
+
+lad_combined <- lad_summary2 %>%
+  left_join(lad_est_group, by=c("pua","la_name")) 
+
+
+total_row <- lad_combined %>%
+  summarise(across(where(is.numeric), ~ sum(.x, na.rm = TRUE))) %>%
+  mutate(la_name = "Total", pua = "")
+
+lad_combined_with_total <- bind_rows(lad_combined, total_row)
+
+column_names <- c(
+  "PUA",
+  "LAD",
+  "11-18 year-old pupils",
+  "Number of schools",
+  "Academy alternative provision sponsor led",
+  "Academy converters",
+  "Academy sponsor led",
+  "Community schools",
+  "Community special schools",
+  "Foundation schools",
+  "Foundation special schools",
+  "Free schools",
+  "Free schools alternative provision",
+  "Free schools special",
+  "Pupil referral units",
+  "Voluntary aided schools",
+  "Academy alternative provision converters")
+
+lad_combined_with_total %>%
+  kable(col.names = column_names) %>%
+  kable_styling(full_width = F)
+
+write_csv(lad_combined_with_total, file=here('data-processed','lad_establishment_type.csv'))
 ```
 
 # Alternative approach
