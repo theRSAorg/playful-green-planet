@@ -1,7 +1,7 @@
-pua,total_pupils,number_of_schools,academies,free_schools,local_authority_maintained_schools,special_schools
-Birmingham,162741,169,120,19,28,2
-Blackburn,9581,9,7,1,1,NA
-Bradford,33466,31,23,6,2,NA
-Hull,16388,14,13,1,NA,NA
-Liverpool,32415,37,20,2,13,2
-Total,254591,260,183,29,44,4
+pua,total_11_18,estimate_14_18,number_of_schools,academies,free_schools,local_authority_maintained_schools,special_schools
+Birmingham,162741,76036,169,120,19,28,2
+Blackburn,9581,4302,9,7,1,1,NA
+Bradford,33466,15601,31,23,6,2,NA
+Hull,16388,7067,14,13,1,NA,NA
+Liverpool,32415,15679,37,20,2,13,2
+Total,254591,118685,260,183,29,44,4
